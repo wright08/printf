@@ -21,18 +21,15 @@ int		convert(const char **format, va_list ap)
 int		next_section(const char **format, va_list ap)
 {
 	int offset;
-	int len;
 
 	offset = -1;
-	len = 0;
 	while (*format[++offset])
 	{
 		if (*format[offset] == '%')
 		{
 			write(1, *format, offset);
-			len = offset;
-			(*format) += ++offset;
-			return (len + convert(format, ap));
+			(*format) += offset + 1;
+			return (offset + convert(format, ap));
 		}
 	}
 	if (offset)
