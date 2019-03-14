@@ -4,18 +4,15 @@
 
 int		convert(const char **format, va_list ap)
 {
-	t_fmt			*fmt;
 	int				i;
-	const t_able	table[] = {	{"c", conv_char}, {"s", conv_string}, {"p", conv_pointer},
-								{"di", conv_int}, {"ouxX", conv_uint}};
+	const t_able	table[] = {	{"default", &conv_int}, {"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
+								{"di", &conv_int}, {"ouxX", &conv_uint}};
 
 	i = sizeof(table) / sizeof(t_able);
 	while (i--)
-	{
 		if (ft_strchr(table[i].keys, **format))
-			return (table[i].func(format, ap));
-	}
-	return (0);
+			break ;
+	return (table[i].func((parse_fmt(format)), ap));
 }
 
 int		next_section(const char **format, va_list ap)

@@ -1,4 +1,5 @@
 #include "ft_printf.h"
+#include <stdlib.h>
 
 static int	conv_arg(va_list ap)
 {
@@ -11,7 +12,7 @@ int			conv_char(t_fmt *fmt, va_list ap)
 
 	if (fmt->width > 1)
 	{
-		ft_memset((fix = ft_strnew(fmt->width - 1), ' ', fmt->width - 1));
+		ft_memset((fix = ft_strnew(fmt->width - 1)), ' ', fmt->width - 1);
 		if (ft_strchr(fmt->flags, '-'))
 		{
 			ft_putchar(conv_arg(ap));

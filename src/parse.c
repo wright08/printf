@@ -29,7 +29,7 @@ static void get_precision(t_fmt *fmt, const char **format)
 		if (!ft_isdigit(**format))
 			fmt->precision = 0;
 		else if (**format != '-')
-			fmt->precision = ft_atoi(**format);
+			fmt->precision = ft_atoi(*format);
 	}
 	while (**format == '-' || ft_isdigit(**format))
 		(*format)++;
@@ -41,7 +41,7 @@ static void get_len(t_fmt *fmt, const char **format)
 	{
 		if (ft_strlen(fmt->len) == 2)
 			continue;
-		ft_strcat(fmt->len, *format, 1);
+		ft_strncat(fmt->len, *format, 1);
 	}
 }
 
@@ -50,7 +50,7 @@ t_fmt *parse_fmt(const char **format)
 	t_fmt *fmt;
 
 	fmt = ft_memalloc(sizeof(t_fmt));
-	get_len(fmt, format);
+	get_flags(fmt, format);
 	get_width(fmt, format);
 	get_precision(fmt, format);
 	get_len(fmt, format);
