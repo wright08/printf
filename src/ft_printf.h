@@ -37,6 +37,7 @@ int     conv_uint(t_fmt *fmt, va_list ap);
 
 void    precision(t_fmt *fmt, char **str);
 void    group(t_fmt *fmt, char **str);
+int     width(t_fmt *fmt, char **str);
 int     print(t_fmt *fmt, char *str);
 
 #endif

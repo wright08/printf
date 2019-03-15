@@ -53,6 +53,36 @@ void	group(t_fmt *fmt, char **str)
 	*str = fix;
 }
 
+int		width(t_fmt *fmt, char **str)
+{
+	char *fix;
+	int diff;
+	int len;
+
+	len = ft_strlen(str);
+	diff = fmt->width - len;
+	if (diff <= 0)
+		return (1);
+	if (ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
+	{
+		fmt->precision = fmt->width - len;
+		return (0);
+	}
+	fix = ft_strnew(fmt->width);
+	if (ft_strchr(fmt->flags, '-'))
+	{
+		ft_strcat(fix, str);
+		ft_memset(fix + len, ' ', diff);
+	}
+	else
+	{
+		ft_memset(fix + len, ' ', diff);
+		ft_memmove(fix, str, len);
+	}
+	free(*str);
+	*str = fix;
+}
+
 int		print(t_fmt *fmt, char *str)
 {
 	int diff;
