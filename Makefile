@@ -4,7 +4,7 @@ ARFLAGS = -rcs
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 CFLAGS += -g -fsanitize=address
-INC = -I src -I lib/includes
+INC = -I src -I lib/inc
 LIB = -L lib -lft
 SRC_DIR = src
 OBJ_DIR = obj
