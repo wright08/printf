@@ -5,14 +5,16 @@
 int		convert(const char **format, va_list ap)
 {
 	int				i;
-	const t_able	table[] = {	{"default", &conv_int}, {"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
+	t_fmt			*fmt;
+	const t_able	table[] = {	{"u", &conv_uint}, {"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
 								{"di", &conv_int}, {"ouxX", &conv_uint}};
 
+	fmt = parse_fmt(format);
 	i = sizeof(table) / sizeof(t_able);
 	while (i--)
 		if (ft_strchr(table[i].keys, **format))
-			return (table[i].func((parse_fmt(format)), ap));
-	return (table[0].func((parse_fmt(format)), ap));
+			return (table[i].func(fmt, ap));
+	return (table[0].func(fmt, ap));
 }
 
 int		next_section(const char **format, va_list ap)
@@ -49,12 +51,3 @@ int		ft_printf(const char *format, ...)
 	va_end(ap);
 	return (len);
 }
-
-// While String
-//  print everything up to the next mod
-//  print conversion
-
-
-//  a
-// 01234567
-// 10

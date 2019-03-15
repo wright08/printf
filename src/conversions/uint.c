@@ -29,6 +29,30 @@ static void alternate(t_fmt *fmt, char **str)
     *str = fix;
 }
 
+static void build_conv(t_fmt *fmt, char **str)
+{
+    int len;
+    char *copy;
+
+    len = (int)ft_strlen(*str);
+    copy = ft_strdup(*str);
+    precision(fmt, str);
+    group(fmt, str);
+    alternate(fmt, str);
+	if (len < fmt->width && ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
+	{
+		fmt->precision = fmt->width - len;
+        precision(fmt, &copy);
+        group(fmt, &copy);
+        alternate(fmt, &copy);
+        free(*str);
+        *str = copy;
+    }
+    else
+        free(copy);
+    width(fmt, str);
+}
+
 int     conv_uint(t_fmt *fmt, va_list ap)
 {
     char *ret;
@@ -43,20 +67,8 @@ int     conv_uint(t_fmt *fmt, va_list ap)
     else if (fmt->conv == 'X')
         fmt->conv = 17;
     ret = ft_ulltoa_base(conv_arg(fmt, ap), fmt->conv);
-    len = -1;
-	precision(fmt, &ret);
-	group(fmt, &ret);
-	alternate(fmt, &ret);
-    if (!width(fmt, &ret))
-        width(fmt, &ret);
+    build_conv(fmt, &ret);
     len = print(fmt, ret);
     free(ret);
     return (len);
 }
-
-// build number string:
-    // precision
-    // group flag
-    // alternate form
-    // if not wide enough, rerun with bigger precision
-// 

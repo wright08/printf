@@ -7,12 +7,12 @@ void	precision(t_fmt *fmt, char **str)
 	int		diff;
 	int		neg;
 
-	if (fmt->precision <= 0 && **str == '0')
+	if (fmt->precision == 0 && **str == '0')
 	{
 		free(*str);
 		(*str) = ft_strnew(0);
 	}
-	neg = (*str == '-');
+	neg = (**str == '-');
 	diff = fmt->precision - (ft_strlen(*str) - neg);
 	if (diff > 0)
 	{
@@ -53,31 +53,26 @@ void	group(t_fmt *fmt, char **str)
 	*str = fix;
 }
 
-int		width(t_fmt *fmt, char **str)
+void	width(t_fmt *fmt, char **str)
 {
 	char *fix;
 	int diff;
 	int len;
 
-	len = ft_strlen(str);
+	len = ft_strlen(*str);
 	diff = fmt->width - len;
 	if (diff <= 0)
-		return (1);
-	if (ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
-	{
-		fmt->precision = fmt->width - len;
-		return (0);
-	}
+		return ;
 	fix = ft_strnew(fmt->width);
 	if (ft_strchr(fmt->flags, '-'))
 	{
-		ft_strcat(fix, str);
+		ft_strcat(fix, *str);
 		ft_memset(fix + len, ' ', diff);
 	}
 	else
 	{
 		ft_memset(fix + len, ' ', diff);
-		ft_memmove(fix, str, len);
+		ft_memmove(fix, *str, len);
 	}
 	free(*str);
 	*str = fix;

@@ -3,5 +3,6 @@
 
 int     main(void)
 {
-    ft_printf("this is a string");
+    ft_printf("num = %12u\n", 123456);
+    printf("%u", 0);
 }

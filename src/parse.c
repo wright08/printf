@@ -57,6 +57,6 @@ t_fmt *parse_fmt(const char **format)
 	get_width(fmt, format);
 	get_precision(fmt, format);
 	get_len(fmt, format);
-	fmt->conv = (*format)++;
+	fmt->conv = *(*format)++;
 	return (fmt);
 }
