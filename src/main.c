@@ -3,5 +3,5 @@
 
 int     main(void)
 {
-    ft_printf("%s\n", "this is a string");
+    ft_printf("this is a string");
 }

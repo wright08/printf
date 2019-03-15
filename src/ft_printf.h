@@ -10,6 +10,7 @@ struct s_fmt
     int     width;
     int     precision;
     char    len[2 + 1];
+    char    conv;
 };
 
 typedef int             (*t_conv)(struct s_fmt *fmt, va_list ap);
@@ -34,6 +35,8 @@ int     conv_pointer(t_fmt *fmt, va_list ap);
 int     conv_string(t_fmt *fmt, va_list ap);
 int     conv_uint(t_fmt *fmt, va_list ap);
 
+void    precision(t_fmt *fmt, char **str);
+void    group(t_fmt *fmt, char **str);
 int     print(t_fmt *fmt, char *str);
 
 #endif

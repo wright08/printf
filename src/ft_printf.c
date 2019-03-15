@@ -11,8 +11,8 @@ int		convert(const char **format, va_list ap)
 	i = sizeof(table) / sizeof(t_able);
 	while (i--)
 		if (ft_strchr(table[i].keys, **format))
-			break ;
-	return (table[i].func((parse_fmt(format)), ap));
+			return (table[i].func((parse_fmt(format)), ap));
+	return (table[0].func((parse_fmt(format)), ap));
 }
 
 int		next_section(const char **format, va_list ap)
@@ -20,19 +20,19 @@ int		next_section(const char **format, va_list ap)
 	int offset;
 
 	offset = -1;
-	while (*format[++offset])
+	while ((*format)[++offset])
 	{
-		if (*format[offset] == '%')
+		if ((*format)[offset] == '%')
 		{
 			write(1, *format, offset);
-			(*format) += offset + 1;
+			*format += offset + 1;
 			return (offset + convert(format, ap));
 		}
 	}
 	if (offset)
 	{
 		write(1, *format, offset);
-		(*format) += offset;
+		*format += offset;
 	}
 	return (offset);
 }
