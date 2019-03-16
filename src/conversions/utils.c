@@ -27,36 +27,6 @@ void	precision(t_fmt *fmt, char **str)
 	}
 }
 
-void	group(t_fmt *fmt, char **str)
-{
-	char	*fix;
-	int		len;
-	int		neg;
-	int		i;
-
-	if (ft_strchr(fmt->flags, '\''))
-	{
-		if ((neg = (**str == '-')))
-			(*str)++;
-		len = ft_strlen(*str);
-		len = len + (len - !!len) / 3;
-		fix = ft_strnew(len + neg);
-		i = 1;
-		while (i != len)
-		{
-			if (i % 4 == 0)
-				fix[neg + len - i] = ',';
-			else
-				fix[neg + len - i] = (*str)[len - i - (len - !!len) / 3];
-			i++;
-		}
-		if (neg)
-			*fix = '-';
-		free(*str - (neg ? 1 : 0));
-		*str = fix;
-	}
-}
-
 void	width(t_fmt *fmt, char **str)
 {
 	char	*fix;

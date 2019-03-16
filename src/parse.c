@@ -2,7 +2,7 @@
 
 static void get_flags(t_fmt *fmt, const char **format)
 {
-	while (ft_strchr("#0- +'", **format))
+	while (ft_strchr("#0- +", **format))
 	{
 		if (ft_strlen(fmt->flags) == 6 || ft_strchr(fmt->flags, **format))
 			continue;

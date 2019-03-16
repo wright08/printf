@@ -32,7 +32,6 @@ static void alternate(t_fmt *fmt, char **str)
 static void build_num(t_fmt *fmt, char **str)
 {
     precision(fmt, str);
-    group(fmt, str);
     alternate(fmt, str);
 }
 
