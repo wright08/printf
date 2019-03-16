@@ -4,5 +4,5 @@
 int     main(void)
 {
     //ft_printf("'%'#4.X'", 12);
-    ft_printf("%u", 12345678);
+    ft_printf("%.2d", 0);
 }
