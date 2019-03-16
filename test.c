@@ -2,5 +2,6 @@
 
 int main()
 {
-	printf("%llhd\n", 12);
+	char *a = "str";
+	printf("%.15p\n", a);
 }

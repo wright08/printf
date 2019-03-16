@@ -4,5 +4,7 @@
 int     main(void)
 {
     //ft_printf("'%'#4.X'", 12);
-    ft_printf("%.2d", 0);
+    char *str = "I am speed";
+    printf("%p\n", str);
+    ft_printf("%p", str);
 }
