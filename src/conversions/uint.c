@@ -13,7 +13,7 @@ static unsigned long long conv_arg(t_fmt *fmt, va_list ap)
 
 static void alternate(t_fmt *fmt, char **str)
 {
-    char *fix;
+    char    *fix;
 
     if (!ft_strchr(fmt->flags, '#') || (**str == '0' && fmt->precision < 0))
         return ;
@@ -29,34 +29,36 @@ static void alternate(t_fmt *fmt, char **str)
     *str = fix;
 }
 
-static void build_conv(t_fmt *fmt, char **str)
+static void build_num(t_fmt *fmt, char **str)
 {
-    int len;
-    char *copy;
-
-    len = (int)ft_strlen(*str);
-    copy = ft_strdup(*str);
     precision(fmt, str);
     group(fmt, str);
     alternate(fmt, str);
+}
+
+static void build_conv(t_fmt *fmt, char **str)
+{
+    char    *copy;
+    int     len;
+
+    copy = ft_strdup(*str);
+	build_num(fmt, str);
+    len = (int)ft_strlen(*str);
 	if (len < fmt->width && ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
 	{
 		fmt->precision = fmt->width - len;
-        precision(fmt, &copy);
-        group(fmt, &copy);
-        alternate(fmt, &copy);
+		build_num(fmt, &copy);
         free(*str);
         *str = copy;
     }
-    else
-        free(copy);
+	else
+		free(copy);
     width(fmt, str);
 }
 
 int     conv_uint(t_fmt *fmt, va_list ap)
 {
-    char *ret;
-    int len;
+    char    *ret;
 
     if (fmt->conv == 'o')
         fmt->conv = 8;
@@ -68,7 +70,5 @@ int     conv_uint(t_fmt *fmt, va_list ap)
         fmt->conv = 17;
     ret = ft_ulltoa_base(conv_arg(fmt, ap), fmt->conv);
     build_conv(fmt, &ret);
-    len = print(fmt, ret);
-    free(ret);
-    return (len);
+    return (print(ret));
 }

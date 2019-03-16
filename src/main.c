@@ -3,6 +3,6 @@
 
 int     main(void)
 {
-    ft_printf("num = %12u\n", 123456);
-    printf("%u", 0);
+    //ft_printf("'%'#4.X'", 12);
+    ft_printf("%'u", 12345678);
 }

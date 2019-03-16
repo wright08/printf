@@ -1,5 +1,6 @@
 #include "ft_printf.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 void	precision(t_fmt *fmt, char **str)
 {
@@ -33,73 +34,61 @@ void	group(t_fmt *fmt, char **str)
 	int		neg;
 	int		i;
 
-	if (!ft_strchr(fmt->flags, '\''))
-		return ;
-	neg = (**str == '-');
-	len = ft_strlen(*str - neg) / 3;
-	fix = ft_strnew(len + neg);
-	i = 0;
-	while (len--)
+	if (ft_strchr(fmt->flags, '\''))
 	{
-		if (**str && **str % 3 == 0)
-			fix[i + neg] = ',';
-		else
-			fix[i + neg] = *str[i - i / 3 + neg];
-		i++;
+		if ((neg = (**str == '-')))
+			(*str)++;
+		len = ft_strlen(*str);
+		len = len + (len - !!len) / 3;
+		fix = ft_strnew(len + neg);
+		i = 1;
+		while (i != len)
+		{
+			if (i % 4 == 0)
+				fix[neg + len - i] = ',';
+			else
+				fix[neg + len - i] = (*str)[len - i - (len - !!len) / 3];
+			i++;
+		}
+		if (neg)
+			*fix = '-';
+		free(*str - (neg ? 1 : 0));
+		*str = fix;
 	}
-	if (neg)
-		*fix = '-';
-	free(*str);
-	*str = fix;
 }
 
 void	width(t_fmt *fmt, char **str)
 {
-	char *fix;
-	int diff;
-	int len;
+	char	*fix;
+	int		diff;
+	int		len;
 
 	len = ft_strlen(*str);
 	diff = fmt->width - len;
-	if (diff <= 0)
-		return ;
-	fix = ft_strnew(fmt->width);
-	if (ft_strchr(fmt->flags, '-'))
-	{
-		ft_strcat(fix, *str);
-		ft_memset(fix + len, ' ', diff);
-	}
-	else
-	{
-		ft_memset(fix + len, ' ', diff);
-		ft_memmove(fix, *str, len);
-	}
-	free(*str);
-	*str = fix;
-}
-
-int		print(t_fmt *fmt, char *str)
-{
-	int diff;
-	char *fix;
-
-	diff = fmt->width - ft_strlen(str);
 	if (diff > 0)
 	{
-		ft_memset((fix = ft_strnew(diff)), ' ', diff);
+		fix = ft_strnew(fmt->width);
 		if (ft_strchr(fmt->flags, '-'))
 		{
-			ft_putstr(str);
-			ft_putstr(fix);
+			ft_strcat(fix, *str);
+			ft_memset(fix + len, ' ', diff);
 		}
 		else
 		{
-			ft_putstr(fix);
-			ft_putstr(str);
+			ft_memset(fix, ' ', diff);
+			ft_strcat(fix, *str);
 		}
-		free(fix);
-		return (fmt->width);
+		free(*str);
+		*str = fix;
 	}
-	ft_putstr(str);
-	return (ft_strlen(str));
+}
+
+int		print(char *str)
+{
+	int len;
+
+	len = ft_strlen(str);
+	write(1, str, len);
+	free(str);
+	return (len);
 }

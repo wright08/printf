@@ -12,8 +12,9 @@ int		convert(const char **format, va_list ap)
 	fmt = parse_fmt(format);
 	i = sizeof(table) / sizeof(t_able);
 	while (i--)
-		if (ft_strchr(table[i].keys, **format))
+		if (ft_strchr(table[i].keys, fmt->conv))
 			return (table[i].func(fmt, ap));
+	(*format)++;
 	return (table[0].func(fmt, ap));
 }
 
