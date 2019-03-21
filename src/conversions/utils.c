@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <stdio.h>
 void	precision(t_fmt *fmt, char **str)
 {
 	char	*fix;
@@ -9,10 +10,7 @@ void	precision(t_fmt *fmt, char **str)
 	int		neg;
 
 	if (fmt->precision == 0 && **str == '0')
-	{
-		free(*str);
-		(*str) = ft_strnew(0);
-	}
+		**str = '\0';
 	neg = (**str == '-');
 	diff = fmt->precision - (ft_strlen(*str) - neg);
 	if (diff > 0)
@@ -21,7 +19,7 @@ void	precision(t_fmt *fmt, char **str)
 		ft_memset(fix + neg, '0', diff);
 		if (neg)
 			*fix = '-';
-		ft_strcat(fix, *str);
+		ft_strcat(fix, *str + neg);
 		free(*str);
 		*str = fix;
 	}

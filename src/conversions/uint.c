@@ -4,9 +4,13 @@
 
 static unsigned long long conv_arg(t_fmt *fmt, va_list ap)
 {
+    if (ft_strchr(fmt->len, 'z'))
+        return ((size_t)va_arg(ap, size_t));
+    if (ft_strchr(fmt->len, 'j'))
+        return ((uintmax_t)va_arg(ap, uintmax_t));
     if (ft_strequ(fmt->len, "l"))
         return (va_arg(ap, unsigned long));
-    else if (ft_strequ(fmt->len, "ll"))
+    if (ft_strequ(fmt->len, "ll"))
         return (va_arg(ap, unsigned long long));
     return (va_arg(ap, unsigned int));
 }
@@ -19,8 +23,8 @@ static void alternate(t_fmt *fmt, char **str)
         return ;
     if (fmt->conv == 8)
         fix = ft_strjoin("0", *str);
-    else if (fmt->conv == 10)
-        fix = ft_strdup(*str);
+    else if (!**str || fmt->conv == 10)
+        return ;
     else if (fmt->conv == 16)
         fix = ft_strjoin("0x", *str);
     else
@@ -45,7 +49,7 @@ static void build_conv(t_fmt *fmt, char **str)
     len = (int)ft_strlen(*str);
 	if (len < fmt->width && ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
 	{
-		fmt->precision = fmt->width - len;
+		fmt->precision = fmt->width - len + ft_strlen(copy);
 		build_num(fmt, &copy);
         free(*str);
         *str = copy;

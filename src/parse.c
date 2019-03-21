@@ -4,9 +4,8 @@ static void get_flags(t_fmt *fmt, const char **format)
 {
 	while (ft_strchr("#0- +", **format))
 	{
-		if (ft_strlen(fmt->flags) == 6 || ft_strchr(fmt->flags, **format))
-			continue;
-		ft_strncat(fmt->flags, *format, 1);
+		if (ft_strlen(fmt->flags) < 6 && !ft_strchr(fmt->flags, **format))
+			ft_strncat(fmt->flags, *format, 1);
 		(*format)++;
 	}
 }
@@ -36,14 +35,10 @@ static void get_precision(t_fmt *fmt, const char **format)
 
 static void get_len(t_fmt *fmt, const char **format)
 {
-	while (ft_strchr("lh", **format))
+	while (ft_strchr("lhjz", **format))
 	{
-		if (ft_strlen(fmt->len) == 2)
-		{
-			(*format)++;
-			continue ;
-		}
-		ft_strncat(fmt->len, *format, 1);
+		if (ft_strlen(fmt->len) < 2)
+			ft_strncat(fmt->len, *format, 1);
 		(*format)++;
 	}
 }
@@ -57,6 +52,5 @@ t_fmt *parse_fmt(const char **format)
 	get_width(fmt, format);
 	get_precision(fmt, format);
 	get_len(fmt, format);
-	fmt->conv = *(*format)++;
 	return (fmt);
 }

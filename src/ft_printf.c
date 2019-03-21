@@ -2,19 +2,24 @@
 #include <stdarg.h>
 #include <unistd.h>
 
+#include <stdio.h>
 int		convert(const char **format, va_list ap)
 {
 	int				i;
 	t_fmt			*fmt;
+	const int		table_len = 7;
 	const t_able	table[] = {	{"u", &conv_uint}, {"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
-								{"di", &conv_int}, {"ouxX", &conv_uint}};
+								{"di", &conv_int}, {"ouxX", &conv_uint}, {"%", &conv_mod}};
 
 	fmt = parse_fmt(format);
-	i = sizeof(table) / sizeof(t_able);
-	while (i--)
-		if (ft_strchr(table[i].keys, fmt->conv))
-			return (table[i].func(fmt, ap));
-	(*format)++;
+	while (**format)
+	{
+		fmt->conv = *(*format)++;
+		i = table_len;
+		while (i--)
+			if (ft_strchr(table[i].keys, fmt->conv))
+				return (table[i].func(fmt, ap));
+	}
 	return (table[0].func(fmt, ap));
 }
 

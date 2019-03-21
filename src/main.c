@@ -3,8 +3,5 @@
 
 int     main(void)
 {
-    //ft_printf("'%'#4.X'", 12);
-    char *str = "I am speed";
-    printf("%p\n", str);
-    ft_printf("%p", str);
+    ft_printf("Hello: %#.x %#.0x", 0, 0);
 }

@@ -3,7 +3,7 @@ AR = ar
 ARFLAGS = -rcs
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
-CFLAGS += -g -fsanitize=address
+CFLAGS += #-g -fsanitize=address
 INC = -I src -I lib/inc
 LIB = -L lib -lft
 SRC_DIR = src
@@ -12,6 +12,7 @@ OBJ_DIR = obj
 SRC = \
 	conversions/char\
 	conversions/int\
+	conversions/mod\
 	conversions/pointer\
 	conversions/string\
 	conversions/uint\
@@ -23,11 +24,11 @@ SRC = \
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 
 all: $(NAME)
-	@./libftprintf.a
+#	@./libftprintf.a
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
-#	@$(AR) $(ARFLAGS) $@ $(OBJ)
+#	@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
+	@$(AR) $(ARFLAGS) $@ $(OBJ) lib/obj/*.o
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
