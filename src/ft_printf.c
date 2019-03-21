@@ -1,26 +1,35 @@
 #include "ft_printf.h"
 #include <stdarg.h>
 #include <unistd.h>
+#include <stdlib.h>
+
+#define TABLE_LEN 6
 
 #include <stdio.h>
 int		convert(const char **format, va_list ap)
 {
 	int				i;
 	t_fmt			*fmt;
-	const int		table_len = 7;
-	const t_able	table[] = {	{"u", &conv_uint}, {"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
+	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
 								{"di", &conv_int}, {"ouxX", &conv_uint}, {"%", &conv_mod}};
 
 	fmt = parse_fmt(format);
 	while (**format)
 	{
 		fmt->conv = *(*format)++;
-		i = table_len;
+		i = TABLE_LEN;
 		while (i--)
+		{
 			if (ft_strchr(table[i].keys, fmt->conv))
-				return (table[i].func(fmt, ap));
+			{
+				i = table[i].func(fmt, ap);
+				free(fmt);
+				return (i);
+			}
+		}
 	}
-	return (table[0].func(fmt, ap));
+	free(fmt);
+	return (0);
 }
 
 int		next_section(const char **format, va_list ap)
