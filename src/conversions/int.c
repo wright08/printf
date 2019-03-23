@@ -40,10 +40,18 @@ static void leader(t_fmt *fmt, char **str)
     *str = fix;
 }
 
-static void build_num(t_fmt *fmt, char **str)
+static int negative(char **str)
 {
-    precision(fmt, str);
-	leader(fmt, str);
+    char *fix;
+
+    if (**str == '-')
+    {
+        fix = ft_strdup(*str + 1);
+        free(*str);
+        *str = fix;
+        return (1);
+    }
+    return (0);
 }
 
 static void build_conv(t_fmt *fmt, char **str)
@@ -52,19 +60,29 @@ static void build_conv(t_fmt *fmt, char **str)
 	int		len;
     int     neg;
 
+    neg = negative(**str);
 	copy = ft_strdup(*str);
-	build_num(fmt, str);
+    precision(fmt, str);
+	leader(fmt, str);
 	len = (int)ft_strlen(*str);
 	if (len < fmt->width && ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
 	{
-        neg = (**str == '-');
-		fmt->precision = fmt->width - len + (ft_strlen(copy) - neg);
-		build_num(fmt, &copy);
+		fmt->precision = fmt->width - len + ft_strlen(copy);
+        precision(fmt, str);
+        leader(fmt, str);
         free(*str);
         *str = copy;
     }
 	else
 		free(copy);
+    if (neg)
+    {
+        copy = ft_strnew(ft_strlen(*str) + 1);
+        *copy = '-';
+        ft_strcat(copy, *str);
+        free (*str);
+        *str = copy;
+    }
     width(fmt, str);
 }
 

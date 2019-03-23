@@ -13,9 +13,7 @@ struct s_fmt
     char    conv;
 };
 typedef struct s_fmt    t_fmt;
-
 typedef int             (*t_conv)(struct s_fmt *fmt, va_list ap);
-
 struct s_table
 {
 	const char *keys;
@@ -25,6 +23,7 @@ typedef struct s_table  t_able;
 
 void    precision(t_fmt *fmt, char **str);
 void    width(t_fmt *fmt, char **str);
+void    zero(int diff, char **str);
 int     print(char *str);
 
 int     conv_char(t_fmt *fmt, va_list ap);
