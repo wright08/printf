@@ -43,11 +43,9 @@ static void get_len(t_fmt *fmt, const char **format)
 	}
 }
 
-t_fmt *parse_fmt(const char **format)
+void	parse_fmt(t_fmt *fmt, const char **format)
 {
-	t_fmt *fmt;
-
-	fmt = ft_memalloc(sizeof(t_fmt));
+	ft_bzero(fmt, sizeof(t_fmt));
 	get_flags(fmt, format);
 	get_width(fmt, format);
 	get_precision(fmt, format);

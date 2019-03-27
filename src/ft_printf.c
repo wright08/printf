@@ -15,21 +15,21 @@ void	free_swap(char **str, char *fix)
 int		convert(const char **format, va_list ap)
 {
 	int				i;
-	t_fmt			*fmt;
+	t_conv			conv;
 	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
 								{"di", &conv_int}, {"ouxX", &conv_uint}, {"%", &conv_mod}};
 
-	fmt = parse_fmt(format);
+	parse_fmt(&conv.fmt, format);
 	while (**format)
 	{
-		fmt->conv = *(*format)++;
+		conv.fmt.type = *(*format)++;
 		i = TABLE_LEN;
 		while (i--)
 		{
-			if (ft_strchr(table[i].keys, fmt->conv))
+			if (ft_strchr(table[i].keys, conv.fmt.type))
 			{
-				i = table[i].func(fmt, ap);
-				free(fmt);
+				i = table[i].func(conv.fmt, ap);
+				free(conv.fmt);
 				return (i);
 			}
 		}

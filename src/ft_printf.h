@@ -6,11 +6,11 @@
 
 struct	s_fmt
 {
-	char	flags[6 + 1];
-	int		width;
 	int		precision;
+	int		width;
+	char	flags[6 + 1];
 	char	len[2 + 1];
-	char	conv;
+	char	type;
 };
 typedef struct s_fmt	t_fmt;
 typedef int				(*t_convf)(struct s_fmt *fmt, va_list ap);
@@ -24,10 +24,11 @@ typedef struct s_table	t_able;
 struct s_conv
 {
 	t_fmt	fmt;
-	char	*conv;
+	char	*str;
 	int		len;
-	int		sign;
+	char	sign;
 };
+typedef struct s_conv	t_conv;
 
 void	zero(int diff, char **str);
 void	precision(t_fmt *fmt, char **str);
