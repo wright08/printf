@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+//The hard problem you're having right now of propogating the negative
+//could be solved by having a t_conv struct that keeps track of its sign.
+
 void	zero(int diff, char **str)
 {
 	char 	*fix;
@@ -11,8 +14,7 @@ void	zero(int diff, char **str)
 	fix = ft_strnew(len + diff);
 	ft_memset(fix, '0', diff);
 	ft_strcat(fix, *str);
-	free(*str);
-	*str = fix;
+	free_swap(str, fix);
 }
 
 void	precision(t_fmt *fmt, char **str)
@@ -53,8 +55,7 @@ void	width(t_fmt *fmt, char **str)
 			ft_memset(fix, ' ', diff);
 			ft_strcat(fix, *str);
 		}
-		free(*str);
-		*str = fix;
+		free_swap(str, fix);
 	}
 }
 
@@ -62,8 +63,7 @@ int		print(char *str)
 {
 	int len;
 
-	len = ft_strlen(str);
-	write(1, str, len);
+	len = ft_putstr(str);
 	free(str);
 	return (len);
 }

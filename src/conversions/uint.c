@@ -29,14 +29,14 @@ static void alternate(t_fmt *fmt, char **str)
         fix = ft_strjoin("0x", *str);
     else
         fix = ft_strjoin("0X", *str);
-    free(*str);
-    *str = fix;
+    free_swap(str, fix);
 }
 
-static void build_num(t_fmt *fmt, char **str)
+static int build_num(t_fmt *fmt, char **str)
 {
     precision(fmt, str);
     alternate(fmt, str);
+    return (ft_strlen(*str));
 }
 
 static void build_conv(t_fmt *fmt, char **str)
@@ -45,14 +45,12 @@ static void build_conv(t_fmt *fmt, char **str)
     int     len;
 
     copy = ft_strdup(*str);
-	build_num(fmt, str);
-    len = (int)ft_strlen(*str);
+	len = build_num(fmt, str);
 	if (len < fmt->width && ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
 	{
 		fmt->precision = fmt->width - len + ft_strlen(copy);
 		build_num(fmt, &copy);
-        free(*str);
-        *str = copy;
+        free_swap(str, copy);
     }
 	else
 		free(copy);

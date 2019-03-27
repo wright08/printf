@@ -11,6 +11,7 @@ OBJ_DIR = obj
 
 SRC = \
 	conversions/char\
+	conversions/int_utils\
 	conversions/int\
 	conversions/mod\
 	conversions/pointer\

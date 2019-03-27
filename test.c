@@ -2,5 +2,6 @@
 
 int main()
 {
-	printf("%");
+	char *str;
+	printf("%lu\n", sizeof(*str));
 }

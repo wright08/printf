@@ -6,6 +6,12 @@
 #define TABLE_LEN 6
 
 #include <stdio.h>
+void	free_swap(char **str, char *fix)
+{
+	free(*str);
+	*str = fix;
+}
+
 int		convert(const char **format, va_list ap)
 {
 	int				i;
