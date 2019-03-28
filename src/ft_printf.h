@@ -38,6 +38,7 @@ int		conv_uint(t_conv *conv, va_list ap);
 
 void	parse_fmt(t_conv *conv, const char **format);
 
+int		has(char *field, char *str);
 void	free_swap(t_conv *conv, char *fix);
 int		ft_printf(const char *format, ...);
 

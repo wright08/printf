@@ -13,9 +13,9 @@ int			conv_char(t_conv *conv, va_list ap)
 
 	if (conv->width > 1)
 	{
-		pad = (ft_strchr(conv->flags, '0') && !ft_strchr(conv->flags, '-')) ? '0' : ' ';
+		pad = (has(conv->flags, "0") && !has(conv->flags, "-")) ? '0' : ' ';
 		ft_memset((fix = ft_strnew(conv->width - 1)), pad, conv->width - 1);
-		if (ft_strchr(conv->flags, '-'))
+		if (has(conv->flags, "-"))
 		{
 			ft_putchar(arg(ap));
 			ft_putstr(fix);

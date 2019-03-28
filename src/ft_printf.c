@@ -6,6 +6,18 @@
 #define TABLE_LEN 6
 
 #include <stdio.h>
+
+int		has(char *field, char *str)
+{
+	while (*str)
+	{
+		if (!ft_strchr(field, *str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
 void	free_swap(t_conv *conv, char *fix)
 {
 	free(conv->str);

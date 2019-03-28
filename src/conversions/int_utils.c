@@ -6,9 +6,9 @@ void leader(t_conv *conv)
     char	*leader;
 
 	leader = NULL;
-	if (ft_strchr(conv->flags, '+'))
+	if (has(conv->flags, "+"))
 		leader = "+";
-	else if (ft_strchr(conv->flags, ' '))
+	else if (has(conv->flags, " "))
 		leader = " ";
     if (*conv->str == '-' || !leader)
         return ;
