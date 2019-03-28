@@ -6,10 +6,10 @@
 #define TABLE_LEN 6
 
 #include <stdio.h>
-void	free_swap(char **str, char *fix)
+void	free_swap(t_conv *conv, char *fix)
 {
-	free(*str);
-	*str = fix;
+	free(conv->str);
+	conv->str = fix;
 }
 
 int		convert(const char **format, va_list ap)
@@ -19,22 +19,21 @@ int		convert(const char **format, va_list ap)
 	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
 								{"di", &conv_int}, {"ouxX", &conv_uint}, {"%", &conv_mod}};
 
-	parse_fmt(&conv.fmt, format);
+	ft_bzero(&conv, sizeof(conv));
+	parse_fmt(&conv, format);
 	while (**format)
 	{
-		conv.fmt.type = *(*format)++;
+		conv.type = *(*format)++;
 		i = TABLE_LEN;
 		while (i--)
 		{
-			if (ft_strchr(table[i].keys, conv.fmt.type))
+			if (ft_strchr(table[i].keys, conv.type))
 			{
-				i = table[i].func(conv.fmt, ap);
-				free(conv.fmt);
+				i = table[i].func(&conv, ap);
 				return (i);
 			}
 		}
 	}
-	free(fmt);
 	return (0);
 }
 

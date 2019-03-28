@@ -17,53 +17,53 @@ void	zero(int diff, char **str)
 	free_swap(str, fix);
 }
 
-void	precision(t_fmt *fmt, char **str)
+void	precision(t_conv *conv)
 {
 	int		diff;
 	int		neg;
 
-	if (fmt->precision == 0 && **str == '0')
-		**str = '\0';
-	neg = (**str == '-');
-	diff = fmt->precision - (ft_strlen(*str) - neg);
+	if (conv->precision == 0 && *conv->str == '0')
+		*conv->str = '\0';
+	neg = (*conv->str == '-');
+	diff = conv->precision - (ft_strlen(conv->str) - neg);
 	if (diff > 0)
 	{
-		zero(diff + neg, str);
+		zero(diff + neg, &conv->str);
 		if (neg)
-			**str = '-';
+			*conv->str = '-';
 	}
 }
 
-void	width(t_fmt *fmt, char **str)
+void	width(t_conv *conv)
 {
 	char	*fix;
 	int		diff;
 	int		len;
 
-	len = ft_strlen(*str);
-	diff = fmt->width - len;
+	len = ft_strlen(*conv->str);
+	diff = conv->width - len;
 	if (diff > 0)
 	{
-		fix = ft_strnew(fmt->width);
-		if (ft_strchr(fmt->flags, '-'))
+		fix = ft_strnew(conv->width);
+		if (ft_strchr(conv->flags, '-'))
 		{
-			ft_strcat(fix, *str);
+			ft_strcat(fix, *conv->str);
 			ft_memset(fix + len, ' ', diff);
 		}
 		else
 		{
 			ft_memset(fix, ' ', diff);
-			ft_strcat(fix, *str);
+			ft_strcat(fix, *conv->str);
 		}
-		free_swap(str, fix);
+		free_swap(conv->str, fix);
 	}
 }
 
-int		print(char *str)
+int		print(t_conv *conv)
 {
 	int len;
 
-	len = ft_putstr(str);
-	free(str);
+	len = ft_putstr(conv->str);
+	free(conv->str);
 	return (len);
 }

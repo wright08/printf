@@ -4,53 +4,51 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-static long long conv_arg(t_fmt *fmt, va_list ap)
+static long long conv_arg(t_conv *conv, va_list ap)
 {
-	if (ft_strchr(fmt->len, 'z'))
+	if (ft_strchr(conv->len, 'z'))
 		return ((ssize_t)va_arg(ap, ssize_t));
-	if (ft_strchr(fmt->len, 'j'))
+	if (ft_strchr(conv->len, 'j'))
 		return ((intmax_t)va_arg(ap, intmax_t));
-	if (ft_strequ(fmt->len, "hh"))
+	if (ft_strequ(conv->len, "hh"))
 		return ((char)va_arg(ap, int));
-	if (ft_strequ(fmt->len, "h"))
+	if (ft_strequ(conv->len, "h"))
 		return ((short)va_arg(ap, int));
-	if (ft_strequ(fmt->len, "l"))
+	if (ft_strequ(conv->len, "l"))
 		return ((long)va_arg(ap, long));
-	if (ft_strequ(fmt->len, "ll"))
+	if (ft_strequ(conv->len, "ll"))
 		return (va_arg(ap, long long));
 	return ((int)va_arg(ap, int));
 }
 
-static int build_num(t_fmt *fmt, char **str)
+static int build_num(t_conv *conv)
 {
-	precision(fmt, str);
-	leader(fmt, str);
-	return (ft_strlen(*str));
+	precision(conv);
+	leader(conv);
+	return (ft_strlen(conv->str));
 }
 
-static void build_conv(t_fmt *fmt, char **str)
+static void build_conv(t_conv *conv)
 {
-	char *copy;
-	int len;
+	char	*copy;
+	int		len;
 
-	copy = ft_strdup(*str);
-	len = build_num(fmt, str);
-	if (len < fmt->width && ft_strchr(fmt->flags, '0') && !ft_strchr(fmt->flags, '-'))
+	copy = ft_strdup(conv->str);
+	len = build_num(conv);
+	if (len < conv->width && ft_strchr(conv->flags, '0') && !ft_strchr(conv->flags, '-'))
 	{
-		fmt->precision = fmt->width - len + ft_strlen(copy);
-		build_num(fmt, &copy);
+		conv->precision = conv->width - len + ft_strlen(copy);
+		build_num(conv, &copy);
 		free_swap(str, copy);
 	}
 	else
 		free(copy);
-	width(fmt, str);
+	width(conv);
 }
 
-int conv_int(t_fmt *fmt, va_list ap)
+int conv_int(t_conv *conv, va_list ap)
 {
-	char *ret;
-
-	ret = ft_lltoa(conv_arg(fmt, ap));
-	build_conv(fmt, &ret);
-	return (print(ret));
+	conv->str = ft_lltoa(conv_arg(conv, ap));
+	build_conv(conv);
+	return (print(conv->str));
 }

@@ -4,16 +4,19 @@
 #include "libft.h"
 #include <stdarg.h>
 
-struct	s_fmt
+struct s_conv
 {
-	int		precision;
-	int		width;
 	char	flags[6 + 1];
-	char	len[2 + 1];
+	int		width;
+	int		precision;
+	char	len_mod[2 + 1];
 	char	type;
+	char	*str;
+	int		len;
+	char	sign;
 };
-typedef struct s_fmt	t_fmt;
-typedef int				(*t_convf)(struct s_fmt *fmt, va_list ap);
+typedef struct s_conv	t_conv;
+typedef int				(*t_convf)(t_conv *conv, va_list ap);
 struct	s_table
 {
 	const char		*keys;
@@ -21,30 +24,22 @@ struct	s_table
 };
 typedef struct s_table	t_able;
 
-struct s_conv
-{
-	t_fmt	fmt;
-	char	*str;
-	int		len;
-	char	sign;
-};
-typedef struct s_conv	t_conv;
 
-void	zero(int diff, char **str);
-void	precision(t_fmt *fmt, char **str);
-void	width(t_fmt *fmt, char **str);
-int		print(char *str);
+void	zero(int diff, t_conv *conv);
+void	precision(t_conv *conv);
+void	width(t_conv *conv);
+int		print(t_conv *conv);
 
-int		conv_char(t_fmt *fmt, va_list ap);
-int		conv_int(t_fmt *fmt, va_list ap);
-int		conv_mod(t_fmt *fmt, va_list ap);
-int		conv_pointer(t_fmt *fmt, va_list ap);
-int		conv_string(t_fmt *fmt, va_list ap);
-int		conv_uint(t_fmt *fmt, va_list ap);
+int		conv_char(t_conv *conv, va_list ap);
+int		conv_int(t_conv *conv, va_list ap);
+int		conv_mod(t_conv *conv, va_list ap);
+int		conv_pointer(t_conv *conv, va_list ap);
+int		conv_string(t_conv *conv, va_list ap);
+int		conv_uint(t_conv *conv, va_list ap);
 
-t_fmt	*parse_fmt(const char **format);
+void	parse_fmt(t_conv *conv, const char **format);
 
-void	free_swap(char **str, char *fix);
+void	free_swap(t_conv *conv, char *fix);
 int		ft_printf(const char *format, ...);
 
 #endif
