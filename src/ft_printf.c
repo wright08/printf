@@ -16,10 +16,9 @@ int		convert(const char **format, va_list ap)
 {
 	int				i;
 	t_conv			conv;
-	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_string}, {"p", &conv_pointer},
+	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_str}, {"p", &conv_ptr},
 								{"di", &conv_int}, {"ouxX", &conv_uint}, {"%", &conv_mod}};
 
-	ft_bzero(&conv, sizeof(conv));
 	parse_fmt(&conv, format);
 	while (**format)
 	{
@@ -28,10 +27,7 @@ int		convert(const char **format, va_list ap)
 		while (i--)
 		{
 			if (ft_strchr(table[i].keys, conv.type))
-			{
-				i = table[i].func(&conv, ap);
-				return (i);
-			}
+				return (table[i].func(&conv, ap));
 		}
 	}
 	return (0);

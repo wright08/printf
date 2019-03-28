@@ -24,8 +24,7 @@ struct	s_table
 };
 typedef struct s_table	t_able;
 
-
-void	zero(int diff, t_conv *conv);
+void	zero(t_conv *conv, int diff);
 void	precision(t_conv *conv);
 void	width(t_conv *conv);
 int		print(t_conv *conv);
@@ -33,8 +32,8 @@ int		print(t_conv *conv);
 int		conv_char(t_conv *conv, va_list ap);
 int		conv_int(t_conv *conv, va_list ap);
 int		conv_mod(t_conv *conv, va_list ap);
-int		conv_pointer(t_conv *conv, va_list ap);
-int		conv_string(t_conv *conv, va_list ap);
+int		conv_ptr(t_conv *conv, va_list ap);
+int		conv_str(t_conv *conv, va_list ap);
 int		conv_uint(t_conv *conv, va_list ap);
 
 void	parse_fmt(t_conv *conv, const char **format);

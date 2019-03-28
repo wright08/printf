@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static void get_flags(t_conv *conv, const char **format)
+static void parse_flags(t_conv *conv, const char **format)
 {
 	while (ft_strchr("#0- +", **format))
 	{
@@ -10,7 +10,7 @@ static void get_flags(t_conv *conv, const char **format)
 	}
 }
 
-static void get_width(t_conv *conv, const char **format)
+static void parse_width(t_conv *conv, const char **format)
 {
 	if (ft_isdigit(**format))
 		conv->width = ft_atoi(*format);
@@ -18,35 +18,33 @@ static void get_width(t_conv *conv, const char **format)
 		(*format)++;
 }
 
-static void get_precision(t_conv *conv, const char **format)
+static void parse_precision(t_conv *conv, const char **format)
 {
 	conv->precision = -1;
 	if (**format == '.')
 	{
 		(*format)++;
-		if (!ft_isdigit(**format))
-			conv->precision = 0;
-		else
-			conv->precision = ft_atoi(*format);
+		conv->precision = ft_isdigit(**format) ? ft_atoi(*format) : 0;
 	}
 	while (**format == '-' || ft_isdigit(**format))
 		(*format)++;
 }
 
-static void get_len(t_conv *conv, const char **format)
+static void parse_len_mod(t_conv *conv, const char **format)
 {
 	while (ft_strchr("lhjz", **format))
 	{
-		if (ft_strlen(conv->len) < 2)
-			ft_strncat(conv->len, *format, 1);
+		if (ft_strlen(conv->len_mod) < 2)
+			ft_strncat(conv->len_mod, *format, 1);
 		(*format)++;
 	}
 }
 
 void	parse_fmt(t_conv *conv, const char **format)
 {
-	get_flags(conv, format);
-	get_width(conv, format);
-	get_precision(conv, format);
-	get_len(conv, format);
+	ft_bzero(conv, sizeof(t_conv));
+	parse_flags(conv, format);
+	parse_width(conv, format);
+	parse_precision(conv, format);
+	parse_len_mod(conv, format);
 }

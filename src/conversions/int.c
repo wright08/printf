@@ -4,19 +4,19 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-static long long conv_arg(t_conv *conv, va_list ap)
+static long long arg(t_conv *conv, va_list ap)
 {
-	if (ft_strchr(conv->len, 'z'))
+	if (ft_strchr(conv->len_mod, 'z'))
 		return ((ssize_t)va_arg(ap, ssize_t));
-	if (ft_strchr(conv->len, 'j'))
+	if (ft_strchr(conv->len_mod, 'j'))
 		return ((intmax_t)va_arg(ap, intmax_t));
-	if (ft_strequ(conv->len, "hh"))
+	if (ft_strequ(conv->len_mod, "hh"))
 		return ((char)va_arg(ap, int));
-	if (ft_strequ(conv->len, "h"))
+	if (ft_strequ(conv->len_mod, "h"))
 		return ((short)va_arg(ap, int));
-	if (ft_strequ(conv->len, "l"))
+	if (ft_strequ(conv->len_mod, "l"))
 		return ((long)va_arg(ap, long));
-	if (ft_strequ(conv->len, "ll"))
+	if (ft_strequ(conv->len_mod, "ll"))
 		return (va_arg(ap, long long));
 	return ((int)va_arg(ap, int));
 }
@@ -38,8 +38,8 @@ static void build_conv(t_conv *conv)
 	if (len < conv->width && ft_strchr(conv->flags, '0') && !ft_strchr(conv->flags, '-'))
 	{
 		conv->precision = conv->width - len + ft_strlen(copy);
-		build_num(conv, &copy);
-		free_swap(str, copy);
+		free_swap(conv, copy);
+		build_num(conv);
 	}
 	else
 		free(copy);
@@ -48,7 +48,7 @@ static void build_conv(t_conv *conv)
 
 int conv_int(t_conv *conv, va_list ap)
 {
-	conv->str = ft_lltoa(conv_arg(conv, ap));
+	conv->str = ft_lltoa(arg(conv, ap));
 	build_conv(conv);
-	return (print(conv->str));
+	return (print(conv));
 }

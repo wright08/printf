@@ -3,7 +3,6 @@
 
 void leader(t_conv *conv)
 {
-    char	*fix;
     char	*leader;
 
 	leader = NULL;
@@ -13,6 +12,5 @@ void leader(t_conv *conv)
 		leader = " ";
     if (*conv->str == '-' || !leader)
         return ;
-    fix = ft_strjoin(leader, conv->str);
-    free_swap(conv->str, fix);
+    free_swap(conv, ft_strjoin(leader, conv->str));
 }
