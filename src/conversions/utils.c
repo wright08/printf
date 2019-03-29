@@ -5,31 +5,33 @@
 //The hard problem you're having right now of propogating the negative
 //could be solved by having a t_conv struct that keeps track of its sign.
 
+int needs_zero_pad(t_conv *conv)
+{
+	return (conv->len < conv->width &&
+			has(conv->flags, "0") && !has(conv->flags, "-"));
+}
+
 void	zero(t_conv *conv, int diff)
 {
 	char 	*fix;
 
-	fix = ft_strnew(ft_strlen(conv->str) + diff);
+	fix = ft_strnew(conv->len + diff + conv->neg);
+	if (conv->neg)
+		*fix = '-';
 	ft_memset(fix, '0', diff);
-	ft_strcat(fix, conv->str);
+	ft_strcat(fix, conv->str + conv->neg);
 	free_swap(conv, fix);
 }
 
 void	precision(t_conv *conv)
 {
 	int		diff;
-	int		neg;
 
 	if (conv->precision == 0 && *conv->str == '0')
 		*conv->str = '\0';
-	neg = (*conv->str == '-');
-	diff = conv->precision - (ft_strlen(conv->str) - neg);
+	diff = conv->precision - (conv->len - conv->neg);
 	if (diff > 0)
-	{
-		zero(conv, diff + neg);
-		if (neg)
-			*conv->str = '-';
-	}
+		zero(conv, diff);
 }
 
 void	width(t_conv *conv)

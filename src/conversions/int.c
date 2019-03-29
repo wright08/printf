@@ -21,23 +21,23 @@ static long long arg(t_conv *conv, va_list ap)
 	return (va_arg(ap, int));
 }
 
-static int build_num(t_conv *conv)
+static void build_num(t_conv *conv)
 {
 	precision(conv);
 	leader(conv);
-	return (ft_strlen(conv->str));
+	conv->len = ft_strlen(conv->str);
+	conv->neg = (*conv->str == '-');
 }
 
 static void build_conv(t_conv *conv)
 {
 	char	*copy;
-	int		len;
 
 	copy = ft_strdup(conv->str);
-	len = build_num(conv);
-	if (len < conv->width && has(conv->flags, "0") && !has(conv->flags, '-'))
+	build_num(conv);
+	if (needs_zero_pad(conv))
 	{
-		conv->precision = conv->width - len + ft_strlen(copy);
+		conv->precision = conv->width - (conv->len - ft_strlen(copy));
 		free_swap(conv, copy);
 		build_num(conv);
 	}

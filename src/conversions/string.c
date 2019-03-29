@@ -7,13 +7,11 @@ static char* arg(va_list ap)
 
 static void build_conv(t_conv *conv)
 {
-	int len;
-
-	len = ft_strlen(conv->str);
-	if (len > conv->precision)
+	conv->len = ft_strlen(conv->str);
+	if (conv->len > conv->precision)
 		conv->str[conv->precision] = '\0';
-	if (len < conv->width && ft_strchr(conv->flags, '0') && !ft_strchr(conv->flags, '-'))
-		zero(conv, conv->width - len);
+	if (needs_zero_pad(conv))
+		zero(conv, conv->precision - conv->len);
 	width(conv);
 }
 
