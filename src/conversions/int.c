@@ -24,6 +24,7 @@ static long long arg(t_conv *conv, va_list ap)
 static void build_num(t_conv *conv)
 {
 	precision(conv);
+	if (!)
 	leader(conv);
 	conv->len = ft_strlen(conv->str);
 	conv->neg = (*conv->str == '-');
