@@ -23,11 +23,10 @@ static long long arg(t_conv *conv, va_list ap)
 
 static void build_num(t_conv *conv)
 {
-	precision(conv);
-	if (!)
-	leader(conv);
 	conv->len = ft_strlen(conv->str);
 	conv->neg = (*conv->str == '-');
+	precision(conv);
+	leader(conv);
 }
 
 static void build_conv(t_conv *conv)
@@ -38,7 +37,7 @@ static void build_conv(t_conv *conv)
 	build_num(conv);
 	if (needs_zero_pad(conv))
 	{
-		conv->precision = conv->width - (conv->len - ft_strlen(copy));
+		conv->precision = conv->width - (conv->len - ft_strlen(copy)) - conv->neg;
 		free_swap(conv, copy);
 		build_num(conv);
 	}

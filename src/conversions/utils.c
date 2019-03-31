@@ -23,12 +23,16 @@ void	zero(t_conv *conv)
 		ft_memset(fix + conv->neg, '0', diff);
 		ft_strcat(fix, conv->str + conv->neg);
 		free_swap(conv, fix);
+		conv->len += diff;
 	}
 }
 void	precision(t_conv *conv)
 {
 	if (conv->precision == 0 && *conv->str == '0')
+	{
 		*conv->str = '\0';
+		conv->len = 0;
+	}
 	zero(conv);
 }
 
@@ -36,17 +40,15 @@ void	width(t_conv *conv)
 {
 	char	*fix;
 	int		diff;
-	int		len;
 
-	len = ft_strlen(conv->str);
-	diff = conv->width - len;
+	diff = conv->width - conv->len;
 	if (diff > 0)
 	{
 		fix = ft_strnew(conv->width);
 		if (ft_strchr(conv->flags, '-'))
 		{
 			ft_strcat(fix, conv->str);
-			ft_memset(fix + len, ' ', diff);
+			ft_memset(fix + conv->len, ' ', diff);
 		}
 		else
 		{
@@ -54,14 +56,15 @@ void	width(t_conv *conv)
 			ft_strcat(fix, conv->str);
 		}
 		free_swap(conv, fix);
+		conv->len += diff;
 	}
 }
 
 int		print(t_conv *conv)
 {
-	int len;
+	int		printed;
 
-	len = ft_putstr(conv->str);
+	printed = ft_putstr(conv->str);
 	free(conv->str);
-	return (len);
+	return (printed);
 }

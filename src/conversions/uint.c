@@ -17,38 +17,39 @@ static unsigned long long arg(t_conv *conv, va_list ap)
 
 static void alternate(t_conv *conv)
 {
-    char    *fix;
+    char    *alt;
 
     if (!ft_strchr(conv->flags, '#') || (*conv->str == '0' && conv->precision < 0))
         return ;
+    alt = NULL;
     if (conv->type == 8)
-        fix = ft_strjoin("0", conv->str);
+        alt = "0";
     else if (!*conv->str || conv->type == 10)
         return ;
-    else if (conv->type == 16)
-        fix = ft_strjoin("0x", conv->str);
-    else
-        fix = ft_strjoin("0X", conv->str);
-    free_swap(conv, fix);
+    if (conv->type == 16)
+        alt = "0x";
+    else if (conv->type == 17)
+        alt = "0X";
+    conv->len += ft_strlen(alt);
+    free_swap(conv, ft_strjoin(alt, conv->str));
 }
 
-static int build_num(t_conv *conv)
+static void build_num(t_conv *conv)
 {
+    conv->len = ft_strlen(conv->str);
     precision(conv);
     alternate(conv);
-    return (ft_strlen(conv->str));
 }
 
 static void build_conv(t_conv *conv)
 {
     char    *copy;
-    int     len;
 
     copy = ft_strdup(conv->str);
-	len = build_num(conv);
-	if (len < conv->width && ft_strchr(conv->flags, '0') && !ft_strchr(conv->flags, '-'))
+	build_num(conv);
+	if (needs_zero_pad(conv))
 	{
-		conv->precision = conv->width - len + ft_strlen(copy);
+		conv->precision = conv->width - conv->len + ft_strlen(copy);
         free_swap(conv, copy);
 		build_num(conv);
     }

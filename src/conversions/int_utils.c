@@ -12,5 +12,6 @@ void leader(t_conv *conv)
 		leader = " ";
     if (*conv->str == '-' || !leader)
         return ;
+	conv->len++;
     free_swap(conv, ft_strjoin(leader, conv->str));
 }

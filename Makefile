@@ -3,7 +3,7 @@ AR = ar
 ARFLAGS = -rcs
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
-CFLAGS += #-g -fsanitize=address
+CFLAGS += -g -fsanitize=address
 INC = -I src -I lib/inc
 LIB = -L lib -lft
 SRC_DIR = src

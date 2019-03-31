@@ -8,9 +8,11 @@ static char* arg(va_list ap)
 static void build_conv(t_conv *conv)
 {
 	conv->len = ft_strlen(conv->str);
-	if (conv->len > conv->precision)
+	if (conv->precision >= 0 && conv->len > conv->precision)
+	{
 		conv->str[conv->precision] = '\0';
-	zero(conv);
+		conv->len = conv->precision;
+	}
 	width(conv);
 }
 

@@ -3,5 +3,5 @@
 
 int     main(void)
 {
-    ft_printf("Hello: %#.x %#.0x", 0, 0);
+    ft_printf("%05d", -42);
 }
