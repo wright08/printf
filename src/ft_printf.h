@@ -16,7 +16,9 @@ struct s_conv
 	char	neg;
 };
 typedef struct s_conv	t_conv;
+
 typedef int				(*t_convf)(t_conv *conv, va_list ap);
+
 struct	s_table
 {
 	const char		*keys;
@@ -25,7 +27,7 @@ struct	s_table
 typedef struct s_table	t_able;
 
 int		needs_zero_pad(t_conv *conv);
-void	zero(t_conv *conv, int diff);
+void	zero(t_conv *conv);
 void	precision(t_conv *conv);
 void	width(t_conv *conv);
 int		print(t_conv *conv);

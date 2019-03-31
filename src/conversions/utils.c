@@ -2,36 +2,34 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-//The hard problem you're having right now of propogating the negative
-//could be solved by having a t_conv struct that keeps track of its sign.
-
 int needs_zero_pad(t_conv *conv)
 {
 	return (conv->len < conv->width &&
 			has(conv->flags, "0") && !has(conv->flags, "-"));
 }
 
-void	zero(t_conv *conv, int diff)
+//Precision zero
+void	zero(t_conv *conv)
 {
-	char 	*fix;
-
-	fix = ft_strnew(conv->len + diff + conv->neg);
-	if (conv->neg)
-		*fix = '-';
-	ft_memset(fix, '0', diff);
-	ft_strcat(fix, conv->str + conv->neg);
-	free_swap(conv, fix);
-}
-
-void	precision(t_conv *conv)
-{
+	char	*fix;
 	int		diff;
 
-	if (conv->precision == 0 && *conv->str == '0')
-		*conv->str = '\0';
 	diff = conv->precision - (conv->len - conv->neg);
 	if (diff > 0)
-		zero(conv, diff);
+	{
+		fix = ft_strnew(conv->len + diff + conv->neg);
+		if (conv->neg)
+			*fix = '-';
+		ft_memset(fix + conv->neg, '0', diff);
+		ft_strcat(fix, conv->str + conv->neg);
+		free_swap(conv, fix);
+	}
+}
+void	precision(t_conv *conv)
+{
+	if (conv->precision == 0 && *conv->str == '0')
+		*conv->str = '\0';
+	zero(conv);
 }
 
 void	width(t_conv *conv)

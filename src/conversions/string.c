@@ -10,8 +10,7 @@ static void build_conv(t_conv *conv)
 	conv->len = ft_strlen(conv->str);
 	if (conv->len > conv->precision)
 		conv->str[conv->precision] = '\0';
-	if (needs_zero_pad(conv))
-		zero(conv, conv->precision - conv->len);
+	zero(conv);
 	width(conv);
 }
 

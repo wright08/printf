@@ -6,16 +6,12 @@ static int	arg(va_list ap)
 	return ((unsigned char)va_arg(ap, int));
 }
 
-static int needs_zero_pad(t_conv *conv)
-{
-	return (has(conv->flags, "0") && !has(conv->flags, "-"));
-}
-
 int			conv_char(t_conv *conv, va_list ap)
 {
 	char *fix;
 	char pad;
 
+	conv->len = 1;
 	if (conv->width > 1)
 	{
 		fix = ft_strnew(conv->width - 1);
