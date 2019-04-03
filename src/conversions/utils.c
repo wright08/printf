@@ -4,11 +4,11 @@
 
 int needs_zero_pad(t_conv *conv)
 {
-	return (conv->len < conv->width &&
+	return (conv->len < conv->width && conv->precision == -1 &&
 			has(conv->flags, "0") && !has(conv->flags, "-"));
 }
 
-//Precision zero
+//Precision-based zero
 void	zero(t_conv *conv)
 {
 	char	*fix;
@@ -28,11 +28,6 @@ void	zero(t_conv *conv)
 }
 void	precision(t_conv *conv)
 {
-	if (conv->precision == 0 && *conv->str == '0')
-	{
-		*conv->str = '\0';
-		conv->len = 0;
-	}
 	zero(conv);
 }
 

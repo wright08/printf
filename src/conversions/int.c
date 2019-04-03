@@ -25,6 +25,11 @@ static void build_num(t_conv *conv)
 {
 	conv->len = ft_strlen(conv->str);
 	conv->neg = (*conv->str == '-');
+	if (conv->precision == 0 && *conv->str == '0')
+	{
+		*conv->str = '\0';
+		conv->len = 0;
+	}
 	precision(conv);
 	leader(conv);
 }

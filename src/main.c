@@ -3,5 +3,5 @@
 
 int     main(void)
 {
-    ft_printf("%05d", -42);
+    ft_printf("%#05o", 43);
 }
