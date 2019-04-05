@@ -2,7 +2,7 @@
 
 static void parse_flags(t_conv *conv, const char **format)
 {
-	while (ft_strchr("#0- +", **format))
+	while (**format && ft_strchr("#0- +", **format))
 	{
 		if (ft_strlen(conv->flags) < 6 && !ft_strchr(conv->flags, **format))
 			ft_strncat(conv->flags, *format, 1);
@@ -32,7 +32,7 @@ static void parse_precision(t_conv *conv, const char **format)
 
 static void parse_len_mod(t_conv *conv, const char **format)
 {
-	while (ft_strchr("lhjz", **format))
+	while (**format && ft_strchr("lhjz", **format))
 	{
 		if (ft_strlen(conv->len_mod) < 2)
 			ft_strncat(conv->len_mod, *format, 1);

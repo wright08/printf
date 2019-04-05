@@ -3,8 +3,9 @@
 
 int     conv_ptr(t_conv *conv, va_list ap)
 {
-    ft_memset(conv->flags, '#', 6);
-    ft_memset(conv->len_mod, 'l', 2);
-    conv->type = 'x';
-    return (conv_uint(conv, ap));
+    conv->str = ft_ulltoa_base(va_arg(ap, long), 16);
+    free_swap(conv, ft_strjoin("0x", conv->str));
+    conv->len = ft_strlen(conv->str);
+    width(conv);
+    return (print(conv));
 }

@@ -29,6 +29,7 @@ static int  is_zero(t_conv *conv)
     return (!*scan);
 }
 
+/*
 static void alternate(t_conv *conv)
 {
     char    *alt;
@@ -47,15 +48,21 @@ static void alternate(t_conv *conv)
 	conv->len += ft_strlen(alt);
     free_swap(conv, ft_strjoin(alt, conv->str));
 }
+*/
 
-static void handle_alt_zero_octal_bug(t_conv *conv)
+static void leader(t_conv *conv, char *lead)
 {
-	if (ft_strchr(conv->flags, '#') &&
-		ft_strchr(conv->flags, '0') &&
-		conv->type == 8)
-	{
-		free_swap(conv, ft_strjoin("0", conv->str));
-	}
+    ft_bzero(lead, 3);
+    if (!ft_strchr(conv->flags, '#') || conv->type == 10)
+        return ;
+    if (conv->type == 8 && *conv->str != '0')
+        *lead = '0';
+    else if (is_zero(conv))
+        ;
+    else if (conv->type == 16)
+        ft_strcat(lead, "0x");
+    else if (conv->type == 17)
+		ft_strcat(lead, "0X");
 }
 
 static void build_num(t_conv *conv)
@@ -67,24 +74,21 @@ static void build_num(t_conv *conv)
 		conv->len = 0;
 	}
     zero(conv);
-    alternate(conv);
 }
 
 static void build_conv(t_conv *conv)
 {
-    char    *copy;
+    char    lead[3];
 
-    copy = ft_strdup(conv->str);
 	build_num(conv);
+    leader(conv, lead);
 	if (needs_zero_pad(conv))
 	{
-		conv->precision = conv->width - (conv->len - ft_strlen(copy));
-        free_swap(conv, copy);
-		build_num(conv);
-		handle_alt_zero_octal_bug(conv);
+		conv->precision = conv->width - ft_strlen(lead);
+        zero(conv);
     }
-	else
-		free(copy);
+	free_swap(conv, ft_strjoin(lead, conv->str));
+	conv->len += ft_strlen(lead);
     width(conv);
 }
 

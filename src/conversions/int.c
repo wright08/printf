@@ -1,5 +1,4 @@
 #include "ft_printf.h"
-#include "int_utils.h"
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
@@ -21,6 +20,17 @@ static long long arg(t_conv *conv, va_list ap)
 	return (va_arg(ap, int));
 }
 
+void	leader(t_conv *conv, char *lead)
+{
+	ft_bzero(lead, 2);
+	if (conv->neg)
+		;
+	else if (has(conv->flags, "+"))
+		*lead = '+';
+	else if (has(conv->flags, " "))
+		*lead = ' ';
+}
+
 static void build_num(t_conv *conv)
 {
 	conv->len = ft_strlen(conv->str);
@@ -35,10 +45,8 @@ static void build_num(t_conv *conv)
 
 static void build_conv(t_conv *conv)
 {
-	char	*copy;
 	char	lead[2];
 
-	copy = ft_strdup(conv->str);
 	build_num(conv);
 	leader(conv, lead);
 	if (needs_zero_pad(conv))
@@ -46,8 +54,6 @@ static void build_conv(t_conv *conv)
 		conv->precision = conv->width - (!!*lead || conv->neg);
 		zero(conv);
 	}
-	else
-		free(copy);
 	free_swap(conv, ft_strjoin(lead, conv->str));
 	conv->len += !!*lead;
 	width(conv);
