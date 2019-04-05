@@ -66,7 +66,7 @@ static void build_num(t_conv *conv)
 		*conv->str = '\0';
 		conv->len = 0;
 	}
-    precision(conv);
+    zero(conv);
     alternate(conv);
 }
 

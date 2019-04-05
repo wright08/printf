@@ -28,7 +28,6 @@ typedef struct s_table	t_able;
 
 int		needs_zero_pad(t_conv *conv);
 void	zero(t_conv *conv);
-void	precision(t_conv *conv);
 void	width(t_conv *conv);
 int		print(t_conv *conv);
 

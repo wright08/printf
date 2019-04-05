@@ -30,24 +30,26 @@ static void build_num(t_conv *conv)
 		*conv->str = '\0';
 		conv->len = 0;
 	}
-	precision(conv);
-	leader(conv);
+	zero(conv);
 }
 
 static void build_conv(t_conv *conv)
 {
 	char	*copy;
+	char	lead[2];
 
 	copy = ft_strdup(conv->str);
 	build_num(conv);
+	leader(conv, lead);
 	if (needs_zero_pad(conv))
 	{
-		conv->precision = conv->width - (conv->len - ft_strlen(copy)) - conv->neg;
-		free_swap(conv, copy);
-		build_num(conv);
+		conv->precision = conv->width - (!!*lead || conv->neg);
+		zero(conv);
 	}
 	else
 		free(copy);
+	free_swap(conv, ft_strjoin(lead, conv->str));
+	conv->len += !!*lead;
 	width(conv);
 }
 

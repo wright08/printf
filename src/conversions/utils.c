@@ -26,10 +26,6 @@ void	zero(t_conv *conv)
 		conv->len += diff;
 	}
 }
-void	precision(t_conv *conv)
-{
-	zero(conv);
-}
 
 void	width(t_conv *conv)
 {

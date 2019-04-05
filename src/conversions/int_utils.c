@@ -1,17 +1,13 @@
 #include "ft_printf.h"
 #include <stdlib.h>
 
-void leader(t_conv *conv)
+void	leader(t_conv *conv, char *lead)
 {
-    char	*leader;
-
-	leader = NULL;
-	if (has(conv->flags, "+"))
-		leader = "+";
+	ft_bzero(lead, 2);
+	if (conv->neg)
+		;
+	else if (has(conv->flags, "+"))
+		*lead = '+';
 	else if (has(conv->flags, " "))
-		leader = " ";
-    if (*conv->str == '-' || !leader)
-        return ;
-	conv->len++;
-    free_swap(conv, ft_strjoin(leader, conv->str));
+		*lead = ' ';
 }
