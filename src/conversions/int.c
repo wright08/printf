@@ -61,6 +61,8 @@ static void build_conv(t_conv *conv)
 
 int conv_int(t_conv *conv, va_list ap)
 {
+	if (conv->type == 'D')
+		ft_memmove(conv->flags, "l", 2);
 	conv->str = ft_lltoa(arg(conv, ap));
 	build_conv(conv);
 	return (print(conv));

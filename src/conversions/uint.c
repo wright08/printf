@@ -94,10 +94,18 @@ static void build_conv(t_conv *conv)
 
 int     conv_uint(t_conv *conv, va_list ap)
 {
-    if (conv->type == 'o')
+    if (conv->type == 'o'|| conv->type == 'O')
+    {
 		conv->type = 8;
+        if (conv->type == 'O')
+            ft_memmove(conv->len_mod, "l", 2);
+    }
     else if (conv->type == 'u')
+    {
 		conv->type = 10;
+        if (conv->type == 'O')
+            ft_memmove(conv->len_mod, "l", 2);
+    }
     else if (conv->type == 'x')
 		conv->type = 16;
     else

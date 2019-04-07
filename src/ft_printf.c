@@ -29,7 +29,7 @@ int		convert(const char **format, va_list ap)
 	int				i;
 	t_conv			conv;
 	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_str}, {"p", &conv_ptr},
-								{"di", &conv_int}, {"ouxX", &conv_uint}, {"%", &conv_mod}};
+								{"diD", &conv_int}, {"ouxOUX", &conv_uint}, {"%", &conv_mod}};
 
 	parse_fmt(&conv, format);
 	while (**format)

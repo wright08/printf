@@ -8,7 +8,6 @@ int needs_zero_pad(t_conv *conv)
 			has(conv->flags, "0") && !has(conv->flags, "-"));
 }
 
-//Precision-based zero
 void	zero(t_conv *conv)
 {
 	char	*fix;
