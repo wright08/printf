@@ -6,4 +6,7 @@ static long double arg(t_fmt *fmt, va_list ap)
     return (va_arg(ap, double));
 }
 
-int     conv_float(t_fmt *fmt, va_list ap);
+int     conv_float(t_fmt *fmt, va_list ap)
+{
+    conv->str = ft_
+}
