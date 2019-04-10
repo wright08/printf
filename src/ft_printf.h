@@ -1,10 +1,10 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-#include "libft.h"
-#include <stdarg.h>
+# include "libft.h"
+# include <stdarg.h>
 
-struct s_conv
+struct	s_conv
 {
 	char	flags[6 + 1];
 	int		width;
@@ -32,6 +32,7 @@ void	width(t_conv *conv);
 int		print(t_conv *conv);
 
 int		conv_char(t_conv *conv, va_list ap);
+int		conv_float(t_conv *conv, va_list ap);
 int		conv_int(t_conv *conv, va_list ap);
 int		conv_mod(t_conv *conv, va_list ap);
 int		conv_ptr(t_conv *conv, va_list ap);

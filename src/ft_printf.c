@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define TABLE_LEN 6
+#define TABLE_LEN 7
 
 #include <stdio.h>
 
@@ -28,8 +28,10 @@ int		convert(const char **format, va_list ap)
 {
 	int				i;
 	t_conv			conv;
-	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_str}, {"p", &conv_ptr},
-								{"diD", &conv_int}, {"ouxOUX", &conv_uint}, {"%", &conv_mod}};
+	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_str},
+								{"p", &conv_ptr}, {"diD", &conv_int},
+								{"ouxOUX", &conv_uint}, {"%", &conv_mod},
+								{"fF", &conv_float}};
 
 	parse_fmt(&conv, format);
 	while (**format)
