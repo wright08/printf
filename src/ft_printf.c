@@ -5,8 +5,6 @@
 
 #define TABLE_LEN 7
 
-#include <stdio.h>
-
 int		has(char *field, char *str)
 {
 	while (*str)
@@ -39,10 +37,8 @@ int		convert(const char **format, va_list ap)
 		conv.type = *(*format)++;
 		i = TABLE_LEN;
 		while (i--)
-		{
 			if (ft_strchr(table[i].keys, conv.type))
 				return (table[i].func(&conv, ap));
-		}
 	}
 	return (0);
 }
