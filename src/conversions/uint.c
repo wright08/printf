@@ -29,27 +29,6 @@ static int  is_zero(t_conv *conv)
     return (!*scan);
 }
 
-/*
-static void alternate(t_conv *conv)
-{
-    char    *alt;
-
-    if (!ft_strchr(conv->flags, '#') || conv->type == 10)
-        return ;
-    alt = NULL;
-    if (conv->type == 8 && *conv->str != '0')
-        alt = "0";
-    else if (is_zero(conv))
-        ;
-    else if (conv->type == 16)
-        alt = "0x";
-    else if (conv->type == 17)
-        alt = "0X";
-	conv->len += ft_strlen(alt);
-    free_swap(conv, ft_strjoin(alt, conv->str));
-}
-*/
-
 static void leader(t_conv *conv, char *lead)
 {
     ft_bzero(lead, 3);
