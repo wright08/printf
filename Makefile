@@ -11,6 +11,7 @@ OBJ_DIR = obj
 
 SRC = \
 	conversions/char\
+	conversions/float\
 	conversions/int\
 	conversions/mod\
 	conversions/pointer\
@@ -24,11 +25,11 @@ SRC = \
 OBJ = $(patsubst %, $(OBJ_DIR)/%.o, $(SRC))
 
 all: $(NAME)
-#	@./libftprintf.a
+	@./libftprintf.a
 
 $(NAME): $(OBJ)
-#	@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
-	@$(AR) $(ARFLAGS) $@ $(OBJ) lib/obj/*.o
+	@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIB) -o $(NAME)
+#	@$(AR) $(ARFLAGS) $@ $(OBJ) lib/obj/*.o
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
