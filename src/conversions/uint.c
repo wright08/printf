@@ -79,10 +79,10 @@ int     conv_uint(t_conv *conv, va_list ap)
         if (conv->type == 'O')
             ft_memmove(conv->len_mod, "l", 2);
     }
-    else if (conv->type == 'u')
+    else if (conv->type == 'u' || conv->type == 'U')
     {
 		conv->type = 10;
-        if (conv->type == 'O')
+        if (conv->type == 'U')
             ft_memmove(conv->len_mod, "l", 2);
     }
     else if (conv->type == 'x')

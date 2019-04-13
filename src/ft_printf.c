@@ -7,7 +7,7 @@
 
 int		has(char *field, char *str)
 {
-	while (*str)
+while (*str)
 	{
 		if (!ft_strchr(field, *str))
 			return (0);

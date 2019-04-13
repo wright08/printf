@@ -5,8 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceRoot}/lib",
-                "${workspaceFolder}/lib/includes",
-                "${workspaceFolder}/inc"
+                "${workspaceFolder}/lib/inc"
             ],
             "defines": [],
             "macFrameworkPath": [
