@@ -6,7 +6,7 @@
 /*   By: rwright <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/19 06:10:21 by rwright           #+#    #+#             */
-/*   Updated: 2019/04/19 06:10:22 by rwright          ###   ########.fr       */
+/*   Updated: 2019/04/19 07:41:39 by rwright          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,36 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-static char	*arg(va_list ap)
+int			conv_char(t_conv *conv, va_list ap)
 {
-	return (va_arg(ap, char *));
+	char *fix;
+	char pad;
+
+	if (conv->width > 1)
+	{
+		fix = ft_strnew(conv->width - 1);
+		pad = (has(conv->flags, "0") && !has(conv->flags, "-")) ? '0' : ' ';
+		ft_memset(fix, pad, conv->width - 1);
+		if (has(conv->flags, "-"))
+		{
+			ft_putchar((unsigned char)va_arg(ap, int));
+			ft_putstr(fix);
+		}
+		else
+		{
+			ft_putstr((unsigned char)va_arg(ap, int));
+			ft_putchar(arg(ap));
+		}
+		free(fix);
+		return (conv->width);
+	}
+	ft_putchar(arg(ap));
+	return (1);
 }
 
-static void	build_conv(t_conv *conv)
+int			conv_str(t_conv *conv, va_list ap)
 {
+	conv->str = va_arg(ap, char *);
 	if (!conv->str)
 		conv->str = ft_strdup("(null)");
 	else
@@ -32,12 +55,6 @@ static void	build_conv(t_conv *conv)
 		conv->len = conv->precision;
 	}
 	width(conv);
-}
-
-int			conv_str(t_conv *conv, va_list ap)
-{
-	conv->str = arg(ap);
-	build_conv(conv);
 	return (print(conv));
 }
 
