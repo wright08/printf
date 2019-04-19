@@ -20,7 +20,7 @@ static long long arg(t_conv *conv, va_list ap)
 	return (va_arg(ap, int));
 }
 
-void	leader(t_conv *conv, char *lead)
+static void	leader(t_conv *conv, char *lead)
 {
 	ft_bzero(lead, 2);
 	if (conv->neg)

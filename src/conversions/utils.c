@@ -4,8 +4,12 @@
 
 int needs_zero_pad(t_conv *conv)
 {
-	return (conv->len < conv->width && conv->precision == -1 &&
-			has(conv->flags, "0") && !has(conv->flags, "-"));
+	return (
+		conv->len < conv->width &&
+		conv->precision == -1 &&
+		has(conv->flags, "0") &&
+		!has(conv->flags, "-")
+	);
 }
 
 void	zero(t_conv *conv)

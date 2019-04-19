@@ -1,53 +1,115 @@
 #include "ft_printf.h"
 #include <stdarg.h>
 #include <stdlib.h>
+#include <math.h>
 
-static float arg(t_conv *conv, va_list ap)
+static long double arg(t_conv *conv, va_list ap)
 {
-    if (has(conv->len_mod, "l"))
-        return (va_arg(ap, double));
     if (has(conv->len_mod, "L"))
         return (va_arg(ap, long double));
     return (va_arg(ap, double));
 }
 
-void    print_bits(long bits, size_t n)
+long double ft_round(long double n, int precision)
 {
-    char    *str;
-    size_t  i;
+	long double reckoning;
+	int			i;
 
-    if (!n || n > 32)
-        return ;
-    str = ft_strnew(n);
-    i = 0;
-    while (i < n)
-	{
-        str[i] = bits & (1 << (n - i - 1)) ? '1' : '0';
-		i++;
-	}
-    ft_putstr(str);
-    free(str);
+	if (fpclassify(n) != FP_NORMAL)
+		return (n);
+	reckoning = .5;
+	i = -1;
+	while (++i < precision)
+		reckoning /= 10;
+	return (n < 0 ? n - reckoning : n + reckoning);
 }
 
-char    *ft_ftoa(float n)
+static void	leader(t_conv *conv, char *lead)
 {
-    int     *bits;
-    int     sign;
-    unsigned char    exponent;
-    long    significand;
+	ft_bzero(lead, 2);
+	if (conv->neg)
+		;
+	else if (has(conv->flags, "+"))
+		*lead = '+';
+	else if (has(conv->flags, " "))
+		*lead = ' ';
+}
 
-    bits = (int *)&n;
-    print_bits(*bits, 32);
-    sign = (*bits & 1 << 31);
-    exponent = (t_byte)(bits + 1);
-    significand = *bits & 0x7FFFFF;
+void	fractional(t_conv *conv, long double n)
+{
+	char	*fix;
+	int		i;
+	char	digit;
 
-	return ("");
+	if (has(conv->flags, "#") || conv->precision != 0)
+	{
+		fix = ft_strnew(conv->len + 1 + conv->precision);
+		ft_memmove(fix, conv->str, conv->len++);
+		ft_strcat(fix, ".");
+		n -= (long long)n;
+		n *= 10;
+		i = -1;
+		while (++i < conv->precision)
+		{
+			digit = (long long)n % 10;
+			fix[conv->len + i] = digit + '0';
+			n = (n - digit) * 10;
+		}
+		free_swap(conv, fix);
+		conv->len += conv->precision;
+	}
+}
+
+static void build_conv(t_conv *conv, long double n)
+{
+	char	lead[2];
+
+	ft_bzero(lead, 2);
+	if (signbit(n) && fpclassify(n) != FP_NAN)
+	{
+		conv->neg = 1;
+		n = -n;
+		if (*conv->str != '-')
+			free_swap(conv, ft_strjoin("-", conv->str));
+	}
+	conv->len = ft_strlen(conv->str);
+	if (fpclassify(n) == FP_NORMAL || fpclassify(n) == FP_ZERO)
+	{
+		leader(conv, lead);
+		fractional(conv, n);
+	}
+	if (fpclassify(n) == FP_INFINITE)
+		leader(conv, lead);
+	if (conv->len < conv->width && has(conv->flags, "0") && !has(conv->flags, "-"))
+	{
+		conv->precision = conv->width - (!!*lead || conv->neg);
+		zero(conv);
+	}
+	free_swap(conv, ft_strjoin(lead, conv->str));
+	conv->len += !!*lead;
+	width(conv);
 }
 
 int     conv_float(t_conv *conv, va_list ap)
 {
-    float f = arg(conv, ap);
-    conv->str = ft_ftoa(f);
-    return (0);
+	long double n;
+	int			class;
+
+	if (conv->precision == -1)
+		conv->precision = 6;
+	n = ft_round(arg(conv, ap), conv->precision);
+	class = fpclassify(n);
+	if (class == FP_NAN || class == FP_INFINITE)
+	{
+		if (class == FP_NAN)
+			conv->str = ft_strdup((conv->type == 'f' ? "nan" : "NAN"));
+		else
+			conv->str = ft_strdup((conv->type == 'f' ? "inf" : "INF"));
+		if (ft_strchr(conv->flags, '0'))
+			*ft_strchr(conv->flags, '0') = 1;
+	}
+	else
+		conv->str = ft_lltoa(n);
+	build_conv(conv, n);
+    return (print(conv));
 }

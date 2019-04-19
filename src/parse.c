@@ -32,7 +32,7 @@ static void parse_precision(t_conv *conv, const char **format)
 
 static void parse_len_mod(t_conv *conv, const char **format)
 {
-	while (**format && ft_strchr("lhjz", **format))
+	while (**format && ft_strchr("lLhjz", **format))
 	{
 		if (ft_strlen(conv->len_mod) < 2)
 			ft_strncat(conv->len_mod, *format, 1);
@@ -42,7 +42,6 @@ static void parse_len_mod(t_conv *conv, const char **format)
 
 void	parse_fmt(t_conv *conv, const char **format)
 {
-	ft_bzero(conv, sizeof(t_conv));
 	parse_flags(conv, format);
 	parse_width(conv, format);
 	parse_precision(conv, format);

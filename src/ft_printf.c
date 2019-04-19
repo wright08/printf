@@ -29,8 +29,10 @@ int		convert(const char **format, va_list ap)
 	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_str},
 								{"p", &conv_ptr}, {"diD", &conv_int},
 								{"ouxOUX", &conv_uint}, {"%", &conv_mod},
-								{"fF", &conv_float}};
+								{"fF", &conv_float} };
 
+	ft_bzero(&conv, sizeof(t_conv));
+	(*format)++;
 	parse_fmt(&conv, format);
 	while (**format)
 	{
@@ -46,23 +48,18 @@ int		convert(const char **format, va_list ap)
 int		next_section(const char **format, va_list ap)
 {
 	int offset;
+	int	printed;
 
+	printed = 0;
 	offset = -1;
 	while ((*format)[++offset])
-	{
 		if ((*format)[offset] == '%')
-		{
-			write(1, *format, offset);
-			*format += offset + 1;
-			return (offset + convert(format, ap));
-		}
-	}
-	if (offset)
-	{
-		write(1, *format, offset);
-		*format += offset;
-	}
-	return (offset);
+			break ;
+	printed = write(1, *format, offset);
+	*format += offset;
+	if (**format == '%')
+		printed += convert(format, ap);
+	return (printed);
 }
 
 int		ft_printf(const char *format, ...)
