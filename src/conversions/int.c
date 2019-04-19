@@ -5,10 +5,12 @@
 
 static long long arg(t_conv *conv, va_list ap)
 {
-	if (has(conv->len_mod, "z"))
-		return ((ssize_t)va_arg(ap, ssize_t));
-	if (has(conv->len_mod, "j"))
-		return ((intmax_t)va_arg(ap, intmax_t));
+	if (conv->type == 'D')
+		ft_memmove(conv->len_mod, "l", 2);
+	if (ft_strequ(conv->len_mod, "z"))
+		return (va_arg(ap, ssize_t));
+	if (ft_strequ(conv->len_mod, "j"))
+		return (va_arg(ap, intmax_t));
 	if (ft_strequ(conv->len_mod, "hh"))
 		return ((char)va_arg(ap, int));
 	if (ft_strequ(conv->len_mod, "h"))
@@ -20,49 +22,31 @@ static long long arg(t_conv *conv, va_list ap)
 	return (va_arg(ap, int));
 }
 
-static void	leader(t_conv *conv, char *lead)
-{
-	ft_bzero(lead, 2);
-	if (conv->neg)
-		;
-	else if (has(conv->flags, "+"))
-		*lead = '+';
-	else if (has(conv->flags, " "))
-		*lead = ' ';
-}
-
-static void build_num(t_conv *conv)
+static void build_conv(t_conv *conv)
 {
 	conv->len = ft_strlen(conv->str);
-	conv->neg = (*conv->str == '-');
+	if (*conv->str == '-')
+	{
+		conv->lead = ft_strdup("-");
+		ft_memmove(conv->str, conv->str + 1, conv->len--);
+	}
+	leader(conv);
 	if (conv->precision == 0 && *conv->str == '0')
 	{
 		*conv->str = '\0';
 		conv->len = 0;
 	}
-	zero(conv);
-}
-
-static void build_conv(t_conv *conv)
-{
-	char	lead[2];
-
-	build_num(conv);
-	leader(conv, lead);
-	if (needs_zero_pad(conv))
-	{
-		conv->precision = conv->width - (!!*lead || conv->neg);
-		zero(conv);
-	}
-	free_swap(conv, ft_strjoin(lead, conv->str));
-	conv->len += !!*lead;
+	else if (conv->precision == -1 && has(conv->flags, "0") &&
+			!has(conv->flags, "-") &&
+			conv->width > (conv->lead_len + conv->len))
+		zero(conv, conv->width - (conv->lead_len + conv->len));
+	else if (conv->precision > conv->len)
+		zero(conv, conv->precision - conv->len);
 	width(conv);
 }
 
 int conv_int(t_conv *conv, va_list ap)
 {
-	if (conv->type == 'D')
-		ft_memmove(conv->len_mod, "l", 2);
 	conv->str = ft_lltoa(arg(conv, ap));
 	build_conv(conv);
 	return (print(conv));

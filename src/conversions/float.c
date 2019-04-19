@@ -24,17 +24,6 @@ long double ft_round(long double n, int precision)
 	return (n < 0 ? n - reckoning : n + reckoning);
 }
 
-static void	leader(t_conv *conv, char *lead)
-{
-	ft_bzero(lead, 2);
-	if (conv->neg)
-		;
-	else if (has(conv->flags, "+"))
-		*lead = '+';
-	else if (has(conv->flags, " "))
-		*lead = ' ';
-}
-
 void	fractional(t_conv *conv, long double n)
 {
 	char	*fix;
@@ -55,38 +44,29 @@ void	fractional(t_conv *conv, long double n)
 			fix[conv->len + i] = digit + '0';
 			n = (n - digit) * 10;
 		}
-		free_swap(conv, fix);
+		free_swap(conv, fix, STR);
 		conv->len += conv->precision;
 	}
 }
 
-static void build_conv(t_conv *conv, long double n)
+static void build_conv(t_conv *conv, long double n, int class)
 {
-	char	lead[2];
-
-	ft_bzero(lead, 2);
-	if (signbit(n) && fpclassify(n) != FP_NAN)
-	{
-		conv->neg = 1;
-		n = -n;
-		if (*conv->str != '-')
-			free_swap(conv, ft_strjoin("-", conv->str));
-	}
 	conv->len = ft_strlen(conv->str);
-	if (fpclassify(n) == FP_NORMAL || fpclassify(n) == FP_ZERO)
+	if (signbit(n) && class != FP_NAN)
 	{
-		leader(conv, lead);
+		n = -n;
+		conv->lead = ft_strdup("-");
+		conv->lead_len++;
+		if (*conv->str == '-')
+			ft_memmove(conv->str, conv->str + 1, conv->len--);
+	}
+	if (ANY2(class, FP_NORMAL, FP_ZERO))
 		fractional(conv, n);
-	}
-	if (fpclassify(n) == FP_INFINITE)
-		leader(conv, lead);
-	if (conv->len < conv->width && has(conv->flags, "0") && !has(conv->flags, "-"))
-	{
-		conv->precision = conv->width - (!!*lead || conv->neg);
-		zero(conv);
-	}
-	free_swap(conv, ft_strjoin(lead, conv->str));
-	conv->len += !!*lead;
+	if (ANY3(class, FP_INFINITE, FP_NORMAL, FP_ZERO))
+		leader(conv);
+	if (has(conv->flags, "0") && !has(conv->flags, "-") &&
+			conv->width > (conv->lead_len + conv->len))
+		zero(conv, conv->width - (conv->lead_len + conv->len));
 	width(conv);
 }
 
@@ -98,8 +78,7 @@ int     conv_float(t_conv *conv, va_list ap)
 	if (conv->precision == -1)
 		conv->precision = 6;
 	n = ft_round(arg(conv, ap), conv->precision);
-	class = fpclassify(n);
-	if (class == FP_NAN || class == FP_INFINITE)
+	if (ANY2(class = fpclassify(n), FP_NAN, FP_INFINITE))
 	{
 		if (class == FP_NAN)
 			conv->str = ft_strdup((conv->type == 'f' ? "nan" : "NAN"));
@@ -110,6 +89,6 @@ int     conv_float(t_conv *conv, va_list ap)
 	}
 	else
 		conv->str = ft_lltoa(n);
-	build_conv(conv, n);
+	build_conv(conv, n, class);
     return (print(conv));
 }

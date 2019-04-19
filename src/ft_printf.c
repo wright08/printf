@@ -3,8 +3,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define TABLE_LEN 7
-
 int		has(char *field, char *str)
 {
 while (*str)
@@ -16,12 +14,6 @@ while (*str)
 	return (1);
 }
 
-void	free_swap(t_conv *conv, char *fix)
-{
-	free(conv->str);
-	conv->str = fix;
-}
-
 int		convert(const char **format, va_list ap)
 {
 	int				i;
@@ -29,7 +21,7 @@ int		convert(const char **format, va_list ap)
 	const t_able	table[] = {	{"c", &conv_char}, {"s", &conv_str},
 								{"p", &conv_ptr}, {"diD", &conv_int},
 								{"ouxOUX", &conv_uint}, {"%", &conv_mod},
-								{"fF", &conv_float} };
+								{"fF", &conv_float}, {NULL, NULL}};
 
 	ft_bzero(&conv, sizeof(t_conv));
 	(*format)++;
@@ -37,8 +29,8 @@ int		convert(const char **format, va_list ap)
 	while (**format)
 	{
 		conv.type = *(*format)++;
-		i = TABLE_LEN;
-		while (i--)
+		i = -1;
+		while (table[++i].func)
 			if (ft_strchr(table[i].keys, conv.type))
 				return (table[i].func(&conv, ap));
 	}

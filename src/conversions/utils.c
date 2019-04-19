@@ -2,31 +2,59 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int needs_zero_pad(t_conv *conv)
+void	free_swap(t_conv *conv, char *fix, t_field field)
 {
-	return (
-		conv->len < conv->width &&
-		conv->precision == -1 &&
-		has(conv->flags, "0") &&
-		!has(conv->flags, "-")
-	);
+	if (field == STR)
+	{
+		free(conv->str);
+		conv->str = fix;
+	}
+	else
+	{
+		free(conv->lead);
+		conv->lead = fix;
+	}
 }
 
-void	zero(t_conv *conv)
+void	leader(t_conv *conv)
+{
+	if (ft_strchr("dDifF", conv->type))
+	{
+		if (conv->lead)
+			;
+		else if (has(conv->flags, "+"))
+			conv->lead = ft_strdup("+");
+		else if (has(conv->flags, " "))
+			conv->lead = ft_strdup(" ");
+		else
+			return ;
+		conv->lead_len = 1;
+	}
+    if (!ft_strchr(conv->flags, '#') || ft_strchr("uU", conv->type))
+        return ;
+    if (ft_strchr("oO", conv->type) && conv->len >= conv->precision &&
+			(*conv->str != '0' || conv->precision == 0))
+        conv->lead = ft_strdup("0");
+    else if (*conv->str == '0')
+        ;
+    else if (conv->type == 'x')
+        conv->lead = ft_strdup("0x");
+    else if (conv->type == 'X')
+        conv->lead = ft_strdup("0X");
+    conv->lead_len = ft_strlen(conv->lead);
+}
+
+void	zero(t_conv *conv, int n)
 {
 	char	*fix;
-	int		diff;
 
-	diff = conv->precision - (conv->len - conv->neg);
-	if (diff > 0)
+	if (n > 0)
 	{
-		fix = ft_strnew(conv->len + diff + conv->neg);
-		if (conv->neg)
-			*fix = '-';
-		ft_memset(fix + conv->neg, '0', diff);
-		ft_strcat(fix, conv->str + conv->neg);
-		free_swap(conv, fix);
-		conv->len += diff;
+		fix = ft_strnew(conv->lead_len + n);
+		ft_memmove(fix, conv->lead, conv->lead_len);
+		ft_memset(fix + conv->lead_len, '0', n);
+		free_swap(conv, fix, LEAD);
+		conv->lead_len += n;
 	}
 }
 
@@ -35,22 +63,23 @@ void	width(t_conv *conv)
 	char	*fix;
 	int		diff;
 
-	diff = conv->width - conv->len;
+	diff = conv->width - (conv->lead_len + conv->len);
 	if (diff > 0)
 	{
-		fix = ft_strnew(conv->width);
 		if (ft_strchr(conv->flags, '-'))
 		{
-			ft_strcat(fix, conv->str);
+			fix = ft_strnew(conv->len + diff);
+			ft_memmove(fix, conv->str, conv->len);
 			ft_memset(fix + conv->len, ' ', diff);
+			free_swap(conv, fix, STR);
 		}
 		else
 		{
+			fix = ft_strnew(diff + conv->lead_len);
 			ft_memset(fix, ' ', diff);
-			ft_strcat(fix, conv->str);
+			ft_memmove(fix + diff, conv->lead, conv->lead_len);
+			free_swap(conv, fix, LEAD);
 		}
-		free_swap(conv, fix);
-		conv->len += diff;
 	}
 }
 
@@ -58,7 +87,9 @@ int		print(t_conv *conv)
 {
 	int		printed;
 
-	printed = ft_putstr(conv->str);
+	printed = ft_putstr(conv->lead);
+	printed += ft_putstr(conv->str);
+	free(conv->lead);
 	free(conv->str);
 	return (printed);
 }

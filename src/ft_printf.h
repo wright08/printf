@@ -13,7 +13,8 @@ struct	s_conv
 	char	type;
 	char	*str;
 	int		len;
-	char	neg;
+	char	*lead;
+	int		lead_len;
 };
 typedef struct s_conv	t_conv;
 
@@ -26,8 +27,11 @@ struct	s_table
 };
 typedef struct s_table	t_able;
 
-int		needs_zero_pad(t_conv *conv);
-void	zero(t_conv *conv);
+typedef enum e_field {STR, LEAD} t_field;
+
+void	free_swap(t_conv *conv, char *fix, t_field field);
+void	leader(t_conv *conv);
+void	zero(t_conv *conv, int n);
 void	width(t_conv *conv);
 int		print(t_conv *conv);
 
@@ -42,7 +46,6 @@ int		conv_uint(t_conv *conv, va_list ap);
 void	parse_fmt(t_conv *conv, const char **format);
 
 int		has(char *field, char *str);
-void	free_swap(t_conv *conv, char *fix);
 int		ft_printf(const char *format, ...);
 
 #endif

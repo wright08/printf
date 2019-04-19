@@ -11,11 +11,10 @@ int			conv_char(t_conv *conv, va_list ap)
 	char *fix;
 	char pad;
 
-	conv->len = 1;
 	if (conv->width > 1)
 	{
 		fix = ft_strnew(conv->width - 1);
-		pad = needs_zero_pad(conv) ? '0' : ' ';
+		pad = (has(conv->flags, "0") && !has(conv->flags, "-")) ? '0' : ' ';
 		ft_memset(fix, pad, conv->width - 1);
 		if (has(conv->flags, "-"))
 		{

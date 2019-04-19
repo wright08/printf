@@ -4,6 +4,10 @@
 
 static unsigned long long arg(t_conv *conv, va_list ap)
 {
+    if (conv->type == 'O')
+        ft_memmove(conv->len_mod, "l", 2);
+    else if (conv->type == 'U')
+        ft_memmove(conv->len_mod, "l", 2);
     if (ft_strchr(conv->len_mod, 'z'))
         return ((size_t)va_arg(ap, size_t));
     if (ft_strchr(conv->len_mod, 'j'))
@@ -15,81 +19,37 @@ static unsigned long long arg(t_conv *conv, va_list ap)
     return (va_arg(ap, unsigned int));
 }
 
-static int  is_zero(t_conv *conv)
-{
-    char    *scan;
-
-    scan = conv->str;
-    while (*scan)
-    {
-        if (*scan != '0')
-            break ;
-        scan++;
-    }
-    return (!*scan);
-}
-
-static void leader(t_conv *conv, char *lead)
-{
-    ft_bzero(lead, 3);
-    if (!ft_strchr(conv->flags, '#') || conv->type == 10)
-        return ;
-    if (conv->type == 8 && *conv->str != '0')
-        *lead = '0';
-    else if (is_zero(conv))
-        ;
-    else if (conv->type == 16)
-        ft_strcat(lead, "0x");
-    else if (conv->type == 17)
-		ft_strcat(lead, "0X");
-}
-
-static void build_num(t_conv *conv)
+static void build_conv(t_conv *conv)
 {
     conv->len = ft_strlen(conv->str);
+    leader(conv);
 	if (conv->precision == 0 && *conv->str == '0')
 	{
 		*conv->str = '\0';
 		conv->len = 0;
 	}
-    zero(conv);
-}
-
-static void build_conv(t_conv *conv)
-{
-    char    lead[3];
-
-	build_num(conv);
-    leader(conv, lead);
-	if (needs_zero_pad(conv))
-	{
-		conv->precision = conv->width - ft_strlen(lead);
-        zero(conv);
-    }
-	free_swap(conv, ft_strjoin(lead, conv->str));
-	conv->len += ft_strlen(lead);
+	else if (conv->precision == -1 && has(conv->flags, "0") &&
+			!has(conv->flags, "-") &&
+			conv->width > (conv->lead_len + conv->len))
+		zero(conv, conv->width - (conv->lead_len + conv->len));
+	else if (conv->precision > conv->len)
+		zero(conv, conv->precision - conv->len);
     width(conv);
 }
 
 int     conv_uint(t_conv *conv, va_list ap)
 {
+    int     base;
+
     if (conv->type == 'o'|| conv->type == 'O')
-    {
-		conv->type = 8;
-        if (conv->type == 'O')
-            ft_memmove(conv->len_mod, "l", 2);
-    }
+        base = 8;
     else if (conv->type == 'u' || conv->type == 'U')
-    {
-		conv->type = 10;
-        if (conv->type == 'U')
-            ft_memmove(conv->len_mod, "l", 2);
-    }
+        base = 10;
     else if (conv->type == 'x')
-		conv->type = 16;
+		base = 16;
     else
-        conv->type = 17;
-    conv->str = ft_ulltoa_base(arg(conv, ap), conv->type);
+        base = 17;
+    conv->str = ft_ulltoa_base(arg(conv, ap), base);
     build_conv(conv);
     return (print(conv));
 }
