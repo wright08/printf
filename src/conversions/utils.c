@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rwright <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/19 06:13:51 by rwright           #+#    #+#             */
+/*   Updated: 2019/04/19 06:13:53 by rwright          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 #include <stdlib.h>
 #include <unistd.h>
@@ -30,18 +42,18 @@ void	leader(t_conv *conv)
 			return ;
 		conv->lead_len = 1;
 	}
-    if (!ft_strchr(conv->flags, '#') || ft_strchr("uU", conv->type))
-        return ;
-    if (ft_strchr("oO", conv->type) && conv->len >= conv->precision &&
+	if (!ft_strchr(conv->flags, '#') || ft_strchr("uU", conv->type))
+		return ;
+	if (ft_strchr("oO", conv->type) && conv->len >= conv->precision &&
 			(*conv->str != '0' || conv->precision == 0))
-        conv->lead = ft_strdup("0");
-    else if (*conv->str == '0')
-        ;
-    else if (conv->type == 'x')
-        conv->lead = ft_strdup("0x");
-    else if (conv->type == 'X')
-        conv->lead = ft_strdup("0X");
-    conv->lead_len = ft_strlen(conv->lead);
+		conv->lead = ft_strdup("0");
+	else if (*conv->str == '0')
+		;
+	else if (conv->type == 'x')
+		conv->lead = ft_strdup("0x");
+	else if (conv->type == 'X')
+		conv->lead = ft_strdup("0X");
+	conv->lead_len = ft_strlen(conv->lead);
 }
 
 void	zero(t_conv *conv, int n)

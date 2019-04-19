@@ -1,16 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   float.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rwright <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/19 06:04:59 by rwright           #+#    #+#             */
+/*   Updated: 2019/04/19 06:05:00 by rwright          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <math.h>
 
-static long double arg(t_conv *conv, va_list ap)
+static long double	arg(t_conv *conv, va_list ap)
 {
-    if (has(conv->len_mod, "L"))
-        return (va_arg(ap, long double));
-    return (va_arg(ap, double));
+	if (has(conv->len_mod, "L"))
+		return (va_arg(ap, long double));
+	return (va_arg(ap, double));
 }
 
-long double ft_round(long double n, int precision)
+long double			ft_round(long double n, int precision)
 {
 	long double reckoning;
 	int			i;
@@ -24,7 +36,7 @@ long double ft_round(long double n, int precision)
 	return (n < 0 ? n - reckoning : n + reckoning);
 }
 
-void	fractional(t_conv *conv, long double n)
+void				fractional(t_conv *conv, long double n)
 {
 	char	*fix;
 	int		i;
@@ -49,7 +61,7 @@ void	fractional(t_conv *conv, long double n)
 	}
 }
 
-static void build_conv(t_conv *conv, long double n, int class)
+static void			build_conv(t_conv *conv, long double n, int class)
 {
 	conv->len = ft_strlen(conv->str);
 	if (signbit(n) && class != FP_NAN)
@@ -70,7 +82,7 @@ static void build_conv(t_conv *conv, long double n, int class)
 	width(conv);
 }
 
-int     conv_float(t_conv *conv, va_list ap)
+int					conv_float(t_conv *conv, va_list ap)
 {
 	long double n;
 	int			class;
@@ -90,5 +102,5 @@ int     conv_float(t_conv *conv, va_list ap)
 	else
 		conv->str = ft_lltoa(n);
 	build_conv(conv, n, class);
-    return (print(conv));
+	return (print(conv));
 }

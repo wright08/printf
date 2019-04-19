@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rwright <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/19 06:02:25 by rwright           #+#    #+#             */
+/*   Updated: 2019/04/19 06:02:28 by rwright          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-static void parse_flags(t_conv *conv, const char **format)
+static void	parse_flags(t_conv *conv, const char **format)
 {
 	while (**format && ft_strchr("#0- +", **format))
 	{
@@ -10,7 +22,7 @@ static void parse_flags(t_conv *conv, const char **format)
 	}
 }
 
-static void parse_width(t_conv *conv, const char **format)
+static void	parse_width(t_conv *conv, const char **format)
 {
 	if (ft_isdigit(**format))
 		conv->width = ft_atoi(*format);
@@ -18,7 +30,7 @@ static void parse_width(t_conv *conv, const char **format)
 		(*format)++;
 }
 
-static void parse_precision(t_conv *conv, const char **format)
+static void	parse_precision(t_conv *conv, const char **format)
 {
 	conv->precision = -1;
 	if (**format == '.')
@@ -30,7 +42,7 @@ static void parse_precision(t_conv *conv, const char **format)
 		(*format)++;
 }
 
-static void parse_len_mod(t_conv *conv, const char **format)
+static void	parse_len_mod(t_conv *conv, const char **format)
 {
 	while (**format && ft_strchr("lLhjz", **format))
 	{
@@ -40,7 +52,7 @@ static void parse_len_mod(t_conv *conv, const char **format)
 	}
 }
 
-void	parse_fmt(t_conv *conv, const char **format)
+void		parse_fmt(t_conv *conv, const char **format)
 {
 	parse_flags(conv, format);
 	parse_width(conv, format);

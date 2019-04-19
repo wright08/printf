@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   int.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rwright <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/19 06:05:35 by rwright           #+#    #+#             */
+/*   Updated: 2019/04/19 06:05:48 by rwright          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
 
-static long long arg(t_conv *conv, va_list ap)
+static long long	arg(t_conv *conv, va_list ap)
 {
 	if (conv->type == 'D')
 		ft_memmove(conv->len_mod, "l", 2);
@@ -22,7 +34,7 @@ static long long arg(t_conv *conv, va_list ap)
 	return (va_arg(ap, int));
 }
 
-static void build_conv(t_conv *conv)
+static void			build_conv(t_conv *conv)
 {
 	conv->len = ft_strlen(conv->str);
 	if (*conv->str == '-')
@@ -45,7 +57,7 @@ static void build_conv(t_conv *conv)
 	width(conv);
 }
 
-int conv_int(t_conv *conv, va_list ap)
+int					conv_int(t_conv *conv, va_list ap)
 {
 	conv->str = ft_lltoa(arg(conv, ap));
 	build_conv(conv);
